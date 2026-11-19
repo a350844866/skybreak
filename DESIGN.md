@@ -43,19 +43,27 @@ dusk blue (stage 2) to starfield (stage 3). Total score is shown as
 - Screen is a dark storm cloud. After a random delay of 1.2–3.0 s a lightning
   flash lights the sky; the player clicks anywhere as fast as possible.
 - 5 trials. Clicking before the flash is a **false start**: the trial is
-  re-rolled and costs a penalty (counted in the stats).
+  re-rolled and costs a penalty (counted in the stats). A click less than
+  **100 ms** after the flash is also a false start: no human reacts that fast,
+  so it is an anticipation guess (standard rule in reaction testing).
 - Measure: reaction time per trial in ms (from flash render, i.e. the
   `requestAnimationFrame` timestamp of the first frame that shows the flash, to
-  the `pointerdown` event timestamp).
+  the `pointerdown` event timestamp). The flash becomes visible on the next
+  display refresh, so every reaction includes about one frame of display
+  latency; it is the same for every player and is stated in the methodology.
 - Score: per trial `max(0, 600 - ms) * 2` metres, false start −150 m.
 - Stage ends after 5 valid trials or 15 s, whichever first.
 
 ### Stage 2 — Drones (flick)
 - Small glowing drones pop up one at a time at random positions, at least 25 %
-  of the screen diagonal away from the previous one (forces a flick).
+  of the screen diagonal away from the previous one (forces a flick). Drone
+  hit radius: `min(28 px, 4.5 % of the shorter screen side)`, sized for
+  first-time players on a 1080p booth monitor.
 - Click to destroy. A drone lives 1.4 s, then escapes (counted as a miss).
 - Measure: time-to-kill per drone (spawn → hit), hits, misses (clicks that hit
-  nothing), escapes. Accuracy = hits / (hits + misses).
+  nothing), escapes. Accuracy = hits / (hits + misses): it rates clicking
+  discipline only. Escapes already cost score and break the streak, so they do
+  not count against accuracy a second time; with no clicks at all accuracy is 0.
 - Score: per hit `150 + max(0, 1400 - ttk_ms) / 4` metres, × accuracy streak
   multiplier (1.0 → 2.0 in steps of 0.1 for consecutive hits, reset on miss or
   escape).
@@ -78,6 +86,9 @@ dusk blue (stage 2) to starfield (stage 3). Total score is shown as
 - A title from the strongest skill: "Storm Reflexes", "Drone Hunter",
   "Dead-Eye", "Comet Rider"; and an overall tier: Cumulus → Stratus →
   Cirrus → Stratosphere → Sky's The Limit.
+
+Stray clicks must not throw a result away: on RESULTS the only way forward is
+the "Enter initials" button (or the idle timeout). Clicks elsewhere do nothing.
 
 ### Initials
 - Arcade-style 3-letter entry, mouse only: three letter wheels, click up/down,
