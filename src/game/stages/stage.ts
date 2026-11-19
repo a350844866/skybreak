@@ -15,6 +15,7 @@ export interface Disc {
 
 export interface StageSurface {
   canvas: HTMLCanvasElement;
+  inputTime?(timestamp: number): number | null;
   viewport(): Viewport;
   color(value: number): void;
   disc(color: number, opacity?: number, layer?: number): Disc;
@@ -24,6 +25,7 @@ export interface Stage {
   readonly durationMs: number;
   start(now: number): void;
   update(dt: number, frameTime: number): boolean;
+  syncPointer?(now: number, point: Point | null): void;
   result(): StageResult;
   dispose(): void;
 }

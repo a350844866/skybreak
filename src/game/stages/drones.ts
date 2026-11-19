@@ -3,7 +3,7 @@ import type { Point, Stage, StageSurface, Viewport } from './stage';
 import type { DroneOutcome } from '../scoring';
 
 const lifetimeMs = 1400;
-const radiusFor = ({ width, height }: Viewport) => Math.min(20, Math.min(width, height) * 0.035);
+const radiusFor = ({ width, height }: Viewport) => Math.min(28, Math.min(width, height) * 0.045);
 
 export function dronePosition(previous: Point | null, viewport: Viewport, random: () => number): Point {
   const { width, height } = viewport;
@@ -41,7 +41,8 @@ export function drones(surface: StageSurface, random = Math.random): Stage {
   }
 
   function click(event: PointerEvent) {
-    const now = event.timeStamp;
+    const now = surface.inputTime ? surface.inputTime(event.timeStamp) : event.timeStamp;
+    if (now === null) return;
     if (event.button !== 0 || now < startedAt || now >= endAt) return;
     expire(now);
     const viewport = surface.viewport();

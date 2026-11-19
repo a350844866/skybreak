@@ -2,6 +2,8 @@ import { rateRun } from '../game/rating';
 import { averageMs, scoreRun, summarizeComet, summarizeDrones } from '../game/scoring';
 import type { RunStats } from '../game/scoring';
 import type { StagePhase } from '../game/stateMachine';
+import type { Run, Ranks } from '../store/ranking';
+import { scoreList } from './scoreList';
 
 const instructions: Record<StagePhase, [name: string, icon: string, text: string]> = {
   STAGE_LIGHTNING: ['Lightning', 'ϟ', 'Click as soon as the sky flashes.'],
@@ -27,7 +29,31 @@ export function screens() {
   }
 
   return {
-    attract: () => showPanel('<h1>Skybreak</h1><button type="button">Click to play</button>'),
+    panel,
+    attract() {
+      showPanel('<h1>Skybreak</h1><button type="button">Click to play</button><div class="attract-scores"><h2>Today’s top 3</h2><div id="today-scores"></div></div><section id="saved-card" aria-live="polite"></section>');
+    },
+    topToday(runs: Run[]) {
+      panel.querySelector('#today-scores')?.replaceChildren(scoreList(runs));
+    },
+    todayUnavailable() {
+      const scores = panel.querySelector('#today-scores');
+      if (scores) scores.textContent = 'Leaderboard unavailable.';
+    },
+    saved(run: Run, ranks: Ranks) {
+      const card = panel.querySelector('#saved-card');
+      if (!card) return;
+      card.innerHTML = skillCard(run.stats);
+      const rank = document.createElement('p');
+      const today = ranks.today === null ? '— today' : `#${ranks.today} today`;
+      const allTime = ranks.allTime === null ? '— all-time' : `#${ranks.allTime} all-time`;
+      rank.textContent = `${run.initials} · ${today} · ${allTime}`;
+      card.prepend(rank);
+    },
+    notice(message: string) {
+      const card = panel.querySelector('#saved-card');
+      if (card) card.textContent = message;
+    },
     countdown: (seconds: number) => showPanel(`<h1>Get ready</h1><p class="count">${seconds}</p>`),
     stage(phase: StagePhase) {
       panel.hidden = true;
@@ -42,7 +68,12 @@ export function screens() {
       timer.textContent = `${Math.ceil(remainingMs / 1000)} s`;
       altitude.textContent = metres(score);
     },
-    results(stats: RunStats) {
+    results: (stats: RunStats) => showPanel(`${skillCard(stats)}<button type="button" id="enter-initials">Enter initials</button>`),
+    unavailable: () => showPanel('<h1>Skybreak</h1><p>WebGL 2 is unavailable. Enable hardware acceleration or try another browser.</p>'),
+  };
+}
+
+function skillCard(stats: RunStats) {
       const drones = summarizeDrones(stats.drones);
       const comet = summarizeComet(stats.comet);
       const { ratings, title, tier } = rateRun(stats);
@@ -52,8 +83,8 @@ export function screens() {
         ['Precision', percent(drones.accuracy), ratings.precision],
         ['Tracking', percent(comet.onTarget), ratings.tracking],
       ];
-      showPanel(`
-        <h1>${metres(scoreRun(stats))}</h1>
+      return `
+        <h2 class="skill-altitude">${metres(scoreRun(stats))}</h2>
         <p>${title} · ${tier}</p>
         <dl class="ratings">${rows.map(([label, raw, value]) => `
           <dt>${label}</dt><dd>${raw} · ${value}/100
@@ -62,9 +93,5 @@ export function screens() {
         <p>${stats.lightning.reactionsMs.length}/5 trials · ${stats.lightning.falseStarts} false starts<br>
           ${drones.hits} hits · ${drones.misses} missed clicks · ${drones.escapes} escapes<br>
           ${(comet.onTargetMs / 1000).toFixed(2)} s on target · ${(comet.longestLockMs / 1000).toFixed(2)} s longest lock</p>
-        <button type="button">Return to title screen</button>
-      `);
-    },
-    unavailable: () => showPanel('<h1>Skybreak</h1><p>WebGL 2 is unavailable. Enable hardware acceleration or try another browser.</p>'),
-  };
+      `;
 }

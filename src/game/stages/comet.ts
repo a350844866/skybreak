@@ -49,13 +49,19 @@ export function comet(surface: StageSurface, initialPointer: Point | null, rando
   let simulatedMs = 0;
   let position = path(0);
 
-  function queue(event: PointerEvent, point: Point | null) {
-    const at = event.timeStamp - startedAt;
+  function syncPointer(now: number, point: Point | null) {
+    const at = now - startedAt;
     if (at >= 0 && at < COMET_MS) moves.push({ at, point });
+  }
+
+  function queue(event: PointerEvent, point: Point | null) {
+    const now = surface.inputTime ? surface.inputTime(event.timeStamp) : event.timeStamp;
+    if (now !== null) syncPointer(now, point);
   }
 
   return {
     durationMs: COMET_MS,
+    syncPointer,
     start(now) {
       startedAt = now;
       surface.color(0x0c1029);

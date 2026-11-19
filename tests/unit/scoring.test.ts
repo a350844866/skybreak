@@ -14,7 +14,7 @@ describe('scoring', () => {
       { kind: 'miss' } as const, hit(400), { kind: 'escape' } as const, hit(600)];
     expect(summarizeDrones({ outcomes })).toMatchObject({
       altitude: 450 * (16.5 + 2) + 400 + 350,
-      hits: 14, misses: 1, escapes: 1, accuracy: 14 / 16, averageTtkMs: 3000 / 14 + 400 / 14,
+      hits: 14, misses: 1, escapes: 1, accuracy: 14 / 15, averageTtkMs: 3000 / 14 + 400 / 14,
     });
   });
 

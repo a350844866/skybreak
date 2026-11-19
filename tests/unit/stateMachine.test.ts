@@ -48,7 +48,9 @@ it.each(['RESULTS', 'INITIALS'] as const)('returns from %s after 25 seconds with
 it('resets explicitly or on Done, creating independent run stats', () => {
   const end = results();
   const now = end.enteredAt + 200;
-  const done = transition(end, { type: 'done', now });
+  expect(transition(end, { type: 'done', now })).toBe(end);
+  const initials = transition(end, { type: 'initials', now });
+  const done = transition(initials, { type: 'done', now });
   const reset = transition(end, { type: 'reset', now });
   expect(done).toEqual(resetRun(now));
   expect(reset).toEqual(done);

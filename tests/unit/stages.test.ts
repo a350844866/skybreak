@@ -5,8 +5,8 @@ import { lightning } from '../../src/game/stages/lightning';
 import { distanceSquared } from '../../src/game/stages/stage';
 import type { StageSurface } from '../../src/game/stages/stage';
 
-function playfield() {
-  const bounds = { left: 0, top: 0, width: 800, height: 600 };
+function playfield(width = 800, height = 600) {
+  const bounds = { left: 0, top: 0, width, height };
   const target = Object.assign(new EventTarget(), { getBoundingClientRect: () => bounds });
   const discs = [] as ReturnType<typeof makeDisc>[];
   const makeDisc = () => ({ show: vi.fn(), hide: vi.fn(), dispose: vi.fn() });
@@ -101,4 +101,29 @@ it('credits time between cursor events and clips the Comet simulation at 20 seco
   stage.dispose();
   expect(discs).toHaveLength(2);
   for (const disc of discs) expect(disc.dispose).toHaveBeenCalledOnce();
+});
+
+
+it('rerolls a 99 ms anticipation but accepts exactly 100 ms', () => {
+  const { surface, send } = playfield();
+  const stage = lightning(surface, () => 0);
+  stage.start(0);
+  stage.update(1200, 1200);
+  send('pointerdown', 1299);
+  stage.update(1299, 2499);
+  send('pointerdown', 2599);
+  expect(stage.result().stats).toEqual({ reactionsMs: [100], falseStarts: 1 });
+  stage.dispose();
+});
+
+it.each([[1920, 1080, 28], [600, 400, 18]])('uses the same drone radius for drawing and hits at %sx%s', (width, height, radius) => {
+  const { surface, send, discs } = playfield(width, height);
+  const stage = drones(surface, () => 0.5);
+  stage.start(0);
+  stage.update(1, 1);
+  expect(discs[0].show).toHaveBeenCalledWith({ x: expect.closeTo(0.5), y: expect.closeTo(0.5) }, radius);
+  send('pointerdown', 2, width / 2 + radius + 0.1, height / 2);
+  send('pointerdown', 3, width / 2 + radius - 0.1, height / 2);
+  expect(stage.result().stats).toEqual({ outcomes: [{ kind: 'miss' }, { kind: 'hit', ttkMs: 2 }] });
+  stage.dispose();
 });

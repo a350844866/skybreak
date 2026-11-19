@@ -78,3 +78,41 @@ button {
 
 .ratings dd { margin: 0; }
 .ratings meter { display: block; width: 100%; }
+
+.skill-altitude { font-size: clamp(2rem, 6vw, 3.5rem); margin: 0; }
+.attract-scores { margin: 1rem auto; max-width: 24rem; }
+.attract-scores h2 { font-size: 1rem; }
+#saved-card:not(:empty) { border-top: 1px solid #546884; padding-top: 0.75rem; }
+.wheels { display: flex; justify-content: center; gap: 1rem; }
+.wheels > div { display: grid; justify-items: center; }
+.wheels output { font-size: 3rem; font-weight: 800; }
+.initials-hint { margin-top: 1rem; }
+
+.operator { max-width: min(32rem, calc(100vw - 3rem)); padding: 1.5rem; border: 1px solid #546884; border-radius: 0.75rem; background: #17243b; }
+.operator::backdrop { background: #080d18cc; }
+.operator input[type=password] { width: 6ch; font: inherit; padding: 0.4em; }
+.operator-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem; }
+#confirm-clear { margin: 1rem 0; padding: 0.75rem; border: 1px solid #ffc478; }
+#diagnostics { margin-top: 1rem; }
+
+.score-list { list-style: none; padding: 0; margin: 0; font-variant-numeric: tabular-nums; }
+.score-list li { display: grid; grid-template-columns: 3ch 1fr auto; gap: 0.75em; padding: 0.3em 0.6em; text-align: left; }
+.score-list li > :first-child { color: #a9c6ef; }
+.score-list .newest, #latest-run { background: #174761; box-shadow: inset 0 0 0 2px #6de2ff; border-radius: 0.25em; }
+
+.board { position: static; display: block; pointer-events: auto; padding: 2vh 4vw; }
+.board header { display: flex; align-items: center; justify-content: space-between; }
+.board h1 { font-size: clamp(2.75rem, 4.5vw, 5.25rem); }
+.board h2 { margin: 0 0 0.4em; font-size: clamp(1.5rem, 2.6vw, 3rem); }
+.board-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 3vw; }
+.board section { padding: 0.7em; background: #17243b; border-radius: 0.4em; font-size: clamp(1.15rem, min(2vw, 3.5vh), 2.5rem); }
+.board .score-list li:nth-child(even):not(.newest) { background: #1d2e49; }
+#latest-run { margin-top: 1em; padding: 0.45em 0.6em; }
+.live { font-size: clamp(1.2rem, 2.4vw, 2.8rem); font-weight: 800; color: #a7ffca; }
+@media (prefers-reduced-motion: no-preference) {
+  .live { animation: live-pulse 1.4s ease-in-out infinite alternate; }
+}
+@keyframes live-pulse { to { opacity: 0.55; } }
+@media (max-width: 640px) {
+  .board-columns { grid-template-columns: 1fr; }
+}

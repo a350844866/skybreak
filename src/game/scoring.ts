@@ -49,13 +49,13 @@ export function summarizeDrones({ outcomes }: DroneStats) {
     }
   }
 
-  // Escapes count against accuracy while remaining visible as a separate raw stat.
+  const clicks = hitsMs.length + misses;
   return {
     hits: hitsMs.length,
     misses,
     escapes,
     averageTtkMs: averageMs(hitsMs),
-    accuracy: outcomes.length ? hitsMs.length / outcomes.length : 0,
+    accuracy: clicks ? hitsMs.length / clicks : 0,
     altitude,
   };
 }

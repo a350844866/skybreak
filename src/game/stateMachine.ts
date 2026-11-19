@@ -66,7 +66,7 @@ export function transition(state: RunState, event: RunEvent): RunState {
     case 'initials':
       return state.phase === 'RESULTS' ? enter(state, 'INITIALS', now) : state;
     case 'done':
-      return state.idleDeadline !== null ? resetRun(now) : state;
+      return state.phase === 'INITIALS' ? resetRun(now) : state;
     case 'input':
       return state.idleDeadline === null ? state
         : { ...state, idleDeadline: Math.max(state.idleDeadline, now + IDLE_MS) };

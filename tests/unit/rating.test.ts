@@ -14,7 +14,7 @@ it('rates missing samples and zero accuracy as zero with a deterministic title',
 it('computes the reference curve midpoints from averages and time-weighted fractions', () => {
   const stats: RunStats = {
     lightning: { reactionsMs: [300, 450], falseStarts: 3 },
-    drones: { outcomes: [{ kind: 'hit', ttkMs: 800 }, { kind: 'escape' }] },
+    drones: { outcomes: [{ kind: 'hit', ttkMs: 800 }, { kind: 'miss' }, { kind: 'escape' }] },
     comet: { elapsedMs: 20_000, locksMs: [4000, 6000] },
   };
   expect(rateRun(stats)).toEqual({

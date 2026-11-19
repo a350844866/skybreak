@@ -22,9 +22,10 @@ export function lightning(surface: StageSurface, random = Math.random): Stage {
   }
 
   function click(event: PointerEvent) {
-    const now = event.timeStamp;
+    const now = surface.inputTime ? surface.inputTime(event.timeStamp) : event.timeStamp;
+    if (now === null) return;
     if (event.button !== 0 || now < armedAt || now >= endAt || reactionsMs.length >= trials) return;
-    if (flashAt === null || now < flashAt) falseStarts++;
+    if (flashAt === null || now - flashAt < 100) falseStarts++;
     else reactionsMs.push(now - flashAt);
     if (reactionsMs.length < trials) arm(now);
   }
