@@ -1,0 +1,80 @@
+:root {
+  font: 16px/1.4 system-ui, sans-serif;
+  color: #f4f7ff;
+  background: #101828;
+  color-scheme: dark;
+}
+
+body { margin: 0; }
+[hidden] { display: none !important; }
+
+#playfield {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+main {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.panel {
+  box-sizing: border-box;
+  width: min(31rem, calc(100% - 2rem));
+  max-height: 100%;
+  overflow: auto;
+  padding: 1.25rem;
+  text-align: center;
+  pointer-events: auto;
+}
+
+h1, p { margin: 0 0 0.75rem; }
+.panel h1, .count { font-size: clamp(2rem, 8vw, 4rem); }
+
+button {
+  margin-top: 0.5rem;
+  padding: 0.6rem 1rem;
+  font: inherit;
+  font-weight: 700;
+  color: #101828;
+  background: #d9e8ff;
+  border: 0;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.hud {
+  position: absolute;
+  inset: 0 0 auto;
+  padding: 0.65rem 1rem;
+  user-select: none;
+  text-shadow: 0 1px 3px #000, 0 0 5px #000;
+}
+
+.hud header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem 1rem;
+  flex-wrap: wrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.hud h1 { font-size: 1.15rem; margin: 0; }
+.hud p { margin: 0.25rem 0 0; }
+
+.ratings {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.5rem 1rem;
+  text-align: left;
+}
+
+.ratings dd { margin: 0; }
+.ratings meter { display: block; width: 100%; }

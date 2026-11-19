@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skybreak</title>
+  </head>
+  <body>
+    <canvas id="playfield" aria-label="Skybreak playfield"></canvas>
+    <main>
+      <section id="panel" class="panel"></section>
+      <section id="hud" class="hud" aria-label="Game status" hidden>
+        <header>
+          <h1 id="stage-name"></h1>
+          <span id="timer"></span>
+          <span id="altitude"></span>
+        </header>
+        <p id="instruction"></p>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
