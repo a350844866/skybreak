@@ -4,6 +4,7 @@ interface OperatorHooks {
   pause(): void;
   resume(): void;
   boardChanged(): void;
+  soundChanged(enabled: boolean): void;
   diagnostics(): { fps: number; p95: number; runsThisSession: number };
 }
 
@@ -150,6 +151,7 @@ export function operatorPanel(hooks: OperatorHooks) {
       void action(async () => {
         try {
           await store.setSetting('sound', enabled);
+          hooks.soundChanged(enabled);
         } catch (error) {
           sound.checked = !enabled;
           throw error;

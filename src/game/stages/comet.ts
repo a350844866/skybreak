@@ -1,7 +1,9 @@
 import { between, COMET_MS, distanceSquared, pointerPoint } from './stage';
-import type { Point, Stage, StageSurface } from './stage';
+import type { Point, Stage, StageSurface, Viewport } from './stage';
 
 const stepMs = 10;
+const BONUS_LOCK_MS = 3000;
+export const cometRadius = ({ width, height }: Viewport) => Math.min(46, Math.min(width, height) * 0.075);
 const waves = [
   { amplitude: 0.21, xSpeed: 1.35, ySpeed: 1.63 },
   { amplitude: 0.10, xSpeed: 2.49, ySpeed: 2.17 },
@@ -37,13 +39,12 @@ function flightPath(random: () => number) {
 
 export function comet(surface: StageSurface, initialPointer: Point | null, random = Math.random): Stage {
   const listeners = new AbortController();
-  const halo = surface.disc(0x889fff, 0.45);
-  const core = surface.disc(0xe8f4ff, 1, 1);
   const path = flightPath(random);
   const locksMs: number[] = [];
   const moves: { at: number; point: Point | null }[] = [];
   let pointer = initialPointer;
   let lockStart: number | null = null;
+  let lockBonuses = 0;
   let startedAt = 0;
   let elapsedMs = 0;
   let simulatedMs = 0;
@@ -64,7 +65,7 @@ export function comet(surface: StageSurface, initialPointer: Point | null, rando
     syncPointer,
     start(now) {
       startedAt = now;
-      surface.color(0x0c1029);
+      surface.theme('night');
       const options = { signal: listeners.signal };
       surface.canvas.addEventListener('pointermove', e => queue(e, pointerPoint(surface.canvas, e)), options);
       surface.canvas.addEventListener('pointerenter', e => queue(e, pointerPoint(surface.canvas, e)), options);
@@ -73,13 +74,24 @@ export function comet(surface: StageSurface, initialPointer: Point | null, rando
     update(dt, frameTime) {
       elapsedMs = frameTime >= startedAt + COMET_MS ? COMET_MS : Math.min(COMET_MS, elapsedMs + dt);
       const viewport = surface.viewport();
-      const radius = Math.min(46, Math.min(viewport.width, viewport.height) * 0.075);
+      const radius = cometRadius(viewport);
       let index = 0;
+
+      // Reports each 3 s lock bonus as it is earned (scoring itself is in summarizeComet).
+      function settleBonuses(at: number) {
+        if (lockStart === null) return;
+        for (const earned = Math.floor((at - lockStart) / BONUS_LOCK_MS); lockBonuses < earned; lockBonuses++) {
+          surface.fx({ type: 'comet-bonus', point: position });
+        }
+      }
 
       function sample(at: number) {
         const inside = pointer !== null && distanceSquared(pointer, position, viewport) <= radius ** 2;
-        if (inside) lockStart ??= at;
-        else if (lockStart !== null) {
+        if (inside && lockStart === null) {
+          lockStart = at;
+          lockBonuses = 0;
+        } else if (!inside && lockStart !== null) {
+          settleBonuses(at);
           locksMs.push(at - lockStart);
           lockStart = null;
         }
@@ -99,8 +111,12 @@ export function comet(surface: StageSurface, initialPointer: Point | null, rando
         position = path(end);
       }
       if (index) moves.splice(0, index);
-      halo.show(position, radius);
-      core.show(position, radius * 0.27);
+      settleBonuses(simulatedMs);
+      const held = lockStart === null ? 0 : simulatedMs - lockStart;
+      surface.fx({
+        type: 'comet', point: position, radiusPx: radius,
+        locked: lockStart !== null, lock: (held % BONUS_LOCK_MS) / BONUS_LOCK_MS,
+      });
       return elapsedMs === COMET_MS;
     },
     result: () => ({
@@ -112,8 +128,7 @@ export function comet(surface: StageSurface, initialPointer: Point | null, rando
     }),
     dispose() {
       listeners.abort();
-      halo.dispose();
-      core.dispose();
+      surface.fx({ type: 'clear' });
     },
   };
 }

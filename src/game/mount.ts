@@ -3,10 +3,12 @@ import { comet } from './stages/comet';
 import { drones } from './stages/drones';
 import { lightning } from './stages/lightning';
 import { pointerPoint } from './stages/stage';
-import type { Point, Stage } from './stages/stage';
+import type { Point, Stage, StageFx, StageSurface } from './stages/stage';
 import { COUNTDOWN_MS, resetRun, transition } from './stateMachine';
 import type { RunEvent } from './stateMachine';
 import { gameView } from '../render/gameView';
+import { synth } from '../audio/synth';
+import { attractDemo } from '../ui/demo';
 import { screens } from '../ui/screens';
 import { initialsScreen } from '../ui/initials';
 import { operatorPanel } from '../ui/operator';
@@ -17,17 +19,32 @@ import { skybreakChannel } from '../store/messages';
 
 export function mountGame() {
   const canvas = document.querySelector<HTMLCanvasElement>('#playfield')!;
+  const labelRoot = document.querySelector<HTMLElement>('#fx-labels')!;
+  const ghost = document.querySelector<HTMLElement>('#ghost-cursor')!;
   const ui = screens();
   document.body.dataset.phase = 'ATTRACT';
   let view: ReturnType<typeof gameView>;
   try {
-    view = gameView(canvas);
+    view = gameView(canvas, labelRoot);
   } catch {
     ui.unavailable();
     return;
   }
 
-  const { surface, draw } = view;
+  const audio = synth();
+  const subscribers: ((event: StageFx) => void)[] = [
+    event => view.fx(event), event => audio.fx(event), event => ui.fx(event),
+  ];
+  // Opt-in test hook (?hook): exposes the effect stream so e2e/soak tests and the
+  // demo recorder can see where targets are. Off for normal play.
+  const hook = new URLSearchParams(location.search).has('hook') ? [] as unknown[] : undefined;
+  if (hook) {
+    Object.assign(window, { __skybreakFx: hook });
+    subscribers.push(event => {
+      hook.push({ ...event, at: performance.now() });
+      if (hook.length > 4000) hook.splice(0, 2000);
+    });
+  }
   const app = new AbortController();
   const appOptions = { signal: app.signal };
   const metrics = frameStats();
@@ -35,7 +52,20 @@ export function mountGame() {
   let pausedAt: number | null = null;
   let pauseOffset = 0;
   const gameTime = (at = performance.now()) => (pausedAt ?? at) - pauseOffset;
-  surface.inputTime = timestamp => pausedAt === null ? gameTime(timestamp) : null;
+  // Stage feedback fans out to the renderer, the sound synth and the HUD.
+  const surface: StageSurface = {
+    canvas,
+    viewport: view.viewport,
+    theme: theme => view.theme(theme),
+    fx: event => {
+      // Feedback is isolated per subscriber: a renderer or audio fault must never
+      // interrupt the stage that emitted the event (its state is already updated).
+      for (const subscriber of subscribers) {
+        try { subscriber(event); } catch (error) { console.error('Skybreak feedback error', error); }
+      }
+    },
+    inputTime: timestamp => pausedAt === null ? gameTime(timestamp) : null,
+  };
   let state = resetRun(gameTime());
   let frame = 0;
   let idleTimer: number | undefined;
@@ -138,9 +168,9 @@ export function mountGame() {
     document.body.dataset.phase = phase;
     if (runId) channel.send({ type: 'stage', runId, phase });
     if (phase === 'ATTRACT') {
-      surface.color(0x101828);
+      view.theme('high');
       ui.attract();
-      draw();
+      attractDemo(view, ghost, screen.signal);
       refreshToday();
       void savePending();
       document.addEventListener('click', () => {
@@ -153,20 +183,37 @@ export function mountGame() {
 
     if (phase === 'COUNTDOWN') {
       let seconds = 3;
+      view.theme('storm');
       ui.countdown(seconds);
+      ui.resetAltitude(0);
+      audio.countdown(seconds);
       onFrame = now => {
         dispatch({ type: 'tick', now });
         if (state.phase !== 'COUNTDOWN') return;
         const remaining = Math.min(3, Math.ceil((COUNTDOWN_MS - now + enteredAt) / 1000));
-        if (seconds !== remaining) ui.countdown(seconds = remaining);
+        if (seconds !== remaining) {
+          ui.countdown(seconds = remaining);
+          audio.countdown(seconds);
+        }
       };
       return;
     }
 
     if (phase === 'RESULTS' || phase === 'INITIALS') {
-      surface.color(0x101828);
+      view.theme('high');
       if (phase === 'RESULTS') {
         ui.results(state.stats);
+        audio.fanfare();
+        const altitude = scoreRun(state.stats);
+        void store.topToday(1).then(([top]) => {
+          if (options.signal.aborted) return;
+          const best = top ? Math.round(top.altitude) : null;
+          const mine = Math.round(altitude);
+          ui.beat(best === null ? 'First run of the day!'
+            : mine > best ? 'New #1 today!'
+              : mine === best ? 'Tied with today’s #1!'
+                : `Beat today’s #1: ${best.toLocaleString('en-US')} m`);
+        }).catch(() => undefined);
         ui.panel.querySelector('#enter-initials')!.addEventListener('click', () => {
           dispatch({ type: 'initials', now: gameTime() });
         }, options);
@@ -175,7 +222,6 @@ export function mountGame() {
           dispatch({ type: 'done', now: gameTime() });
         });
       }
-      draw();
       function activity(event: Event) {
         dispatch({ type: 'input', now: gameTime() });
         if (options.signal.aborted) event.stopPropagation();
@@ -192,6 +238,8 @@ export function mountGame() {
       : phase === 'STAGE_DRONES' ? drones(surface) : comet(surface, pointer);
     stage = active;
     ui.stage(phase);
+    view.punch();
+    if (phase === 'STAGE_LIGHTNING') audio.go();
     active.start(enteredAt);
     let previousFrame = enteredAt;
     const carriedAltitude = scoreRun(state.stats);
@@ -207,8 +255,7 @@ export function mountGame() {
         : result.phase === 'STAGE_DRONES' ? summarizeDrones(result.stats).altitude
           : summarizeComet(result.stats).altitude;
       const elapsed = now - enteredAt;
-      ui.update(elapsed, active.durationMs - elapsed, carriedAltitude + score);
-      draw();
+      ui.update(elapsed, active.durationMs - elapsed, active.durationMs, carriedAltitude + score);
     };
     onFrame(enteredAt);
   }
@@ -217,15 +264,18 @@ export function mountGame() {
     pause() {
       pausedAt = performance.now();
       window.clearTimeout(idleTimer);
+      audio.suspend();
     },
     resume() {
       if (pausedAt === null) return;
       pauseOffset += performance.now() - pausedAt;
       pausedAt = null;
+      audio.resume();
       if (app.signal.aborted) return;
       stage?.syncPointer?.(gameTime(), pointer);
       armIdle();
     },
+    soundChanged(enabled) { audio.setEnabled(enabled); },
     boardChanged() {
       if (app.signal.aborted) return;
       channel.send({ type: 'board-changed' });
@@ -237,6 +287,8 @@ export function mountGame() {
   function animate(now: number) {
     metrics.record(now);
     if (pausedAt === null && now >= pauseOffset) onFrame?.(gameTime(now));
+    // Rendered after the stage update, so a flash or spawn set this frame is what gets drawn.
+    view.render(now);
     frame = requestAnimationFrame(animate);
   }
 
@@ -245,10 +297,16 @@ export function mountGame() {
   window.addEventListener('pointermove', rememberPointer, appOptions);
   window.addEventListener('pointerdown', rememberPointer, appOptions);
   document.documentElement.addEventListener('pointerleave', () => { pointer = null; }, appOptions);
-  window.addEventListener('resize', () => {
-    view.resize();
-    if (pausedAt === null) draw();
+  window.addEventListener('resize', () => view.resize(), appOptions);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) audio.suspend();
+    else if (pausedAt === null) audio.resume();
   }, appOptions);
+  // Browsers only allow audio after a gesture; the first click or key unlocks it.
+  for (const type of ['pointerdown', 'keydown']) {
+    window.addEventListener(type, () => audio.unlock(), { ...appOptions, capture: true });
+  }
+  void store.getSetting('sound').then(enabled => audio.setEnabled(enabled)).catch(() => undefined);
   window.addEventListener('pagehide', () => {
     if (runId || pending) channel.send({ type: 'run-ended', runId: runId ?? pending!.id });
   }, appOptions);
@@ -266,6 +324,7 @@ export function mountGame() {
     operator();
     if (runId || pending) channel.send({ type: 'run-ended', runId: runId ?? pending!.id });
     channel.close();
+    audio.dispose();
     view.dispose();
   };
 }

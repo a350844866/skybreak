@@ -17,7 +17,13 @@ function request<T>(operation: IDBRequest<T>): Promise<T> {
   });
 }
 
-export function createStore(factory: IDBFactory = indexedDB) {
+/**
+ * @param clock injectable for tests. The active event day follows the local
+ * calendar date; an operator rollover ("start new event day") only holds for
+ * the calendar date it was made on, so a multi-day booth gets a fresh board
+ * every morning without anyone touching the operator panel.
+ */
+export function createStore(factory: IDBFactory = indexedDB, clock: () => Date = () => new Date()) {
   let connection: Promise<IDBDatabase> | undefined;
 
   function open() {
@@ -27,7 +33,7 @@ export function createStore(factory: IDBFactory = indexedDB) {
         const runs = opening.result.createObjectStore('runs', { keyPath: 'id' });
         runs.createIndex('eventDay', 'eventDay');
         runs.createIndex('altitude', 'altitude');
-        opening.result.createObjectStore('metadata').put(localDay(), 'eventDay');
+        opening.result.createObjectStore('metadata');
       };
       opening.onsuccess = () => {
         const db = opening.result;
@@ -51,7 +57,10 @@ export function createStore(factory: IDBFactory = indexedDB) {
   }
 
   async function activeDay(meta: IDBObjectStore): Promise<string> {
-    return await request(meta.get('eventDay')) ?? localDay();
+    const today = localDay(clock());
+    const manual: string | undefined = await request(meta.get('eventDay'));
+    const setOn: string | undefined = await request(meta.get('eventDaySetOn'));
+    return manual && setOn === today ? manual : today;
   }
 
   return {
@@ -97,7 +106,7 @@ export function createStore(factory: IDBFactory = indexedDB) {
     },
     startNewEventDay() {
       return transaction('readwrite', async (runs, meta) => {
-        const date = localDay();
+        const date = localDay(clock());
         const current = await activeDay(meta);
         const index = runs.index('eventDay');
         let day = date;
@@ -105,6 +114,7 @@ export function createStore(factory: IDBFactory = indexedDB) {
           day = `${date}.${suffix}`;
         }
         await request(meta.put(day, 'eventDay'));
+        await request(meta.put(date, 'eventDaySetOn'));
         return day;
       });
     },

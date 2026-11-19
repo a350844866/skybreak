@@ -60,3 +60,21 @@ it('persists operator settings in metadata', async () => {
   expect(await reopened.getSetting('pin')).toBe('0123');
   expect(await reopened.getSetting('sound')).toBe(false);
 });
+
+it('follows the calendar date and keeps a manual rollover only for the day it was made', async () => {
+  const factory = new IDBFactory();
+  let now = new Date(2026, 10, 20, 9, 0);
+  const store = createStore(factory, () => now);
+  const first = await store.saveRun(entry('day1', 10));
+  expect(first.eventDay).toBe('2026-11-20');
+  const rolled = await store.startNewEventDay();
+  expect(rolled).toBe('2026-11-20.2');
+  expect((await store.saveRun(entry('day1b', 20))).eventDay).toBe('2026-11-20.2');
+  expect((await store.topToday(10)).map(run => run.id)).toEqual(['day1b']);
+
+  now = new Date(2026, 10, 21, 8, 30); // Next morning: nobody touches the operator panel.
+  expect(await store.topToday(10)).toEqual([]);
+  const next = await store.saveRun(entry('day2', 5));
+  expect(next.eventDay).toBe('2026-11-21');
+  expect((await store.topAllTime(10)).map(run => run.id)).toEqual(['day1b', 'day1', 'day2']);
+});

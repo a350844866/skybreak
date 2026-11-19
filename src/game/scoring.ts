@@ -29,6 +29,12 @@ export function scoreLightning({ reactionsMs, falseStarts }: LightningStats): nu
   return reactionsMs.reduce((score, ms) => score + Math.max(0, 600 - ms) * 2, -150 * falseStarts);
 }
 
+/** Streak multiplier for the next hit: 1.0 rising by 0.1 per consecutive hit, capped at 2.0. */
+export const streakMultiplier = (streak: number) => (10 + Math.min(streak, 10)) / 10;
+
+export const droneHitAltitude = (ttkMs: number, streak: number) =>
+  (150 + Math.max(0, 1400 - ttkMs) / 4) * streakMultiplier(streak);
+
 export function summarizeDrones({ outcomes }: DroneStats) {
   const hitsMs: number[] = [];
   let misses = 0;
@@ -39,8 +45,7 @@ export function summarizeDrones({ outcomes }: DroneStats) {
   for (const outcome of outcomes) {
     if (outcome.kind === 'hit') {
       hitsMs.push(outcome.ttkMs);
-      const multiplier = (10 + Math.min(streak, 10)) / 10;
-      altitude += (150 + Math.max(0, 1400 - outcome.ttkMs) / 4) * multiplier;
+      altitude += droneHitAltitude(outcome.ttkMs, streak);
       streak++;
     } else {
       if (outcome.kind === 'miss') misses++;

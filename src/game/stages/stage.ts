@@ -7,18 +7,36 @@ export const COMET_MS = 20_000;
 export interface Point { x: number; y: number }
 export interface Viewport { width: number; height: number }
 
-export interface Disc {
-  show(point: Point, radiusPx: number): void;
-  hide(): void;
-  dispose(): void;
-}
+/** Sky look for each part of the run; the renderer cross-fades between them. */
+export type Theme = 'high' | 'storm' | 'dusk' | 'night';
+
+/**
+ * Gameplay events a stage reports. Stages own timing and scoring only; the
+ * renderer, HUD and audio subscribe to these, so visuals can change without
+ * touching anything that is measured. Points are normalised (0..1, y down).
+ *
+ * Events that change what the player must react to (flash, drone-spawn) are
+ * emitted inside update() for the frame that is drawn right after it, so the
+ * measured start time is the first frame that shows them.
+ */
+export type StageFx =
+  | { type: 'flash' }
+  | { type: 'reaction'; ms: number }
+  | { type: 'false-start' }
+  | { type: 'drone-spawn'; point: Point; radiusPx: number }
+  | { type: 'drone-hit'; point: Point; gain: number; multiplier: number }
+  | { type: 'drone-miss'; point: Point }
+  | { type: 'drone-escape'; point: Point }
+  | { type: 'comet'; point: Point; radiusPx: number; locked: boolean; lock: number }
+  | { type: 'comet-bonus'; point: Point }
+  | { type: 'clear' };
 
 export interface StageSurface {
   canvas: HTMLCanvasElement;
   inputTime?(timestamp: number): number | null;
   viewport(): Viewport;
-  color(value: number): void;
-  disc(color: number, opacity?: number, layer?: number): Disc;
+  theme(theme: Theme): void;
+  fx(event: StageFx): void;
 }
 
 export interface Stage {

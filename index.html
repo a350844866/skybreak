@@ -3,21 +3,35 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#081a45" />
     <title>Skybreak</title>
   </head>
   <body>
     <canvas id="playfield" aria-label="Skybreak playfield"></canvas>
+    <div id="fx-labels" aria-hidden="true"></div>
     <main>
       <section id="panel" class="panel"></section>
       <section id="hud" class="hud" aria-label="Game status" hidden>
-        <header>
-          <h1 id="stage-name"></h1>
-          <span id="timer"></span>
-          <span id="altitude"></span>
-        </header>
-        <p id="instruction"></p>
+        <div class="hud-bar">
+          <div class="hud-stage">
+            <span id="stage-name"></span>
+            <span id="stage-dots" class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          </div>
+          <div class="hud-timer">
+            <span class="timer-track"><span id="timer-fill"></span></span>
+            <span id="timer"></span>
+          </div>
+          <div class="hud-score">
+            <span id="streak" class="streak" hidden></span>
+            <span><span id="altitude">0</span><small> m</small></span>
+          </div>
+        </div>
+        <div id="instruction" class="instruction"></div>
       </section>
     </main>
+    <div id="ghost-cursor" aria-hidden="true" hidden>
+      <svg viewBox="0 0 24 24"><path d="M3 2l7 19 2.6-7.4L20 11z" fill="#fff" stroke="#0b1a3a" stroke-width="1.6" stroke-linejoin="round"/></svg>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
