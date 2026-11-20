@@ -85,6 +85,20 @@ test.describe('a full run', () => {
       const widths = widthChanges(log.frames);
       await testInfo.attach('frames.json', { body: JSON.stringify({ frames, firstUse, widths }, null, 2),
         contentType: 'application/json' });
+      // Printed before any assertion so a passing CI run still shows the numbers (and
+      // whether a deferred drop happened at all, and in which phase).
+      const evidence = STAGES.map(stage => {
+        const stageWidths = log.frames.filter(frame => frame[3] === stage).map(frame => frame[4]);
+        const summary = frames[stage];
+        return `[frames] ${stage} frames=${summary?.frames ?? 0} workP95=${summary?.workP95.toFixed(1) ?? '-'}ms `
+          + `workMax=${summary?.workMax.toFixed(1) ?? '-'}ms width=${stageWidths[0] ?? '-'}->${stageWidths.at(-1) ?? '-'}`;
+      });
+      const resized = widths.slice(1).map((change, i) => `width ${widths[i].width}->${change.width} in ${change.phase}`);
+      evidence.push(`[quality] ${resized.length ? resized.join(', ') : 'no change'}`);
+      for (const line of evidence) {
+        console.log(line);
+        testInfo.annotations.push({ type: line.slice(1, line.indexOf(']')), description: line });
+      }
       for (const stage of STAGES) {
         // SwiftShader on CI manages only a few frames per second; "rendered at all" is the check.
         expect(frames[stage]?.frames ?? 0, `${stage} rendered`).toBeGreaterThan(10);
