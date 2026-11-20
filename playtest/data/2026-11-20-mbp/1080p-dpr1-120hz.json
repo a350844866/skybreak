@@ -1,0 +1,2729 @@
+{
+ "group": "1080p",
+ "runs": 3,
+ "dpr": 1,
+ "env": {
+  "browserVersion": "157.0.8103.79",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+  "devicePixelRatio": 1,
+  "viewport": [
+   1920,
+   1080
+  ],
+  "gpu": {
+   "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+   "vendor": "Google Inc. (Apple)",
+   "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M2 Pro, Unspecified Version)",
+   "maskedRenderer": "WebKit WebGL"
+  },
+  "reducedMotion": false
+ },
+ "refresh_period_ms": 8.30000000000291,
+ "phase_stats": {
+  "ATTRACT": {
+   "frames": 894,
+   "interval_p50": 8.30000000000291,
+   "interval_p95": 9.200000000011642,
+   "interval_max": 150,
+   "work_p50": 0.09999999403953552,
+   "work_p95": 0.4000000059604645,
+   "work_max": 9,
+   "over25": 4,
+   "over_1_5_refresh": 6,
+   "ratio_min": 1
+  },
+  "COUNTDOWN": {
+   "frames": 1078,
+   "interval_p50": 8.30000000000291,
+   "interval_p95": 9.299999999988358,
+   "interval_max": 25.90000000000009,
+   "work_p50": 0.10000002384185791,
+   "work_p95": 0.3999999761581421,
+   "work_max": 0.800000011920929,
+   "over25": 1,
+   "over_1_5_refresh": 1,
+   "ratio_min": 1
+  },
+  "STAGE_LIGHTNING": {
+   "frames": 4202,
+   "interval_p50": 8.30000000000291,
+   "interval_p95": 9.199999999982538,
+   "interval_max": 9.400000000000546,
+   "work_p50": 0.09999999403953552,
+   "work_p95": 0.30000001192092896,
+   "work_max": 2.300000011920929,
+   "over25": 0,
+   "over_1_5_refresh": 0,
+   "ratio_min": 1
+  },
+  "STAGE_DRONES": {
+   "frames": 7200,
+   "interval_p50": 8.30000000000291,
+   "interval_p95": 9.19999999999709,
+   "interval_max": 9.400000000001455,
+   "work_p50": 0.20000001788139343,
+   "work_p95": 0.5999999940395355,
+   "work_max": 2.300000011920929,
+   "over25": 0,
+   "over_1_5_refresh": 0,
+   "ratio_min": 1
+  },
+  "STAGE_COMET": {
+   "frames": 7200,
+   "interval_p50": 8.30000000000291,
+   "interval_p95": 9.10000000000582,
+   "interval_max": 10.400000000001455,
+   "work_p50": 0.19999998807907104,
+   "work_p95": 0.5,
+   "work_max": 7,
+   "over25": 0,
+   "over_1_5_refresh": 0,
+   "ratio_min": 1
+  },
+  "RESULTS": {
+   "frames": 9003,
+   "interval_p50": 8.30000000000291,
+   "interval_p95": 9.10000000000582,
+   "interval_max": 9.400000000023283,
+   "work_p50": 0.19999998807907104,
+   "work_p95": 0.3999999761581421,
+   "work_max": 2.0999999940395355,
+   "over25": 0,
+   "over_1_5_refresh": 0,
+   "ratio_min": 1
+  }
+ },
+ "run_results": [
+  {
+   "run": 1,
+   "bot": {
+    "flashes": 5,
+    "clicks_lightning": 5,
+    "spawns": 78,
+    "drone_clicks": 78,
+    "hits": 77,
+    "misses": 0,
+    "escapes": 0,
+    "false_starts": 0,
+    "reactions": [
+     288.8999999880789,
+     229.59999999403954,
+     302.4999999940392,
+     225.3999999940388,
+     216.79999998807943
+    ],
+    "comet_frames": 2401,
+    "comet_locked": 2372,
+    "comet_bonus": 6,
+    "comet_polls": 1135,
+    "max_lock": 0.9973666666706413,
+    "events": [
+     [
+      "flash",
+      6443.699999988079
+     ],
+     [
+      "reaction",
+      6732.899999976158
+     ],
+     [
+      "flash",
+      8110.0999999940395
+     ],
+     [
+      "reaction",
+      8339.5
+     ],
+     [
+      "flash",
+      9952.59999999404
+     ],
+     [
+      "reaction",
+      10254.199999988079
+     ],
+     [
+      "flash",
+      12642.59999999404
+     ],
+     [
+      "reaction",
+      12868.299999982119
+     ],
+     [
+      "flash",
+      15668.199999988079
+     ],
+     [
+      "reaction",
+      15885.399999976158
+     ],
+     [
+      "clear",
+      15892.399999976158
+     ],
+     [
+      "drone-spawn",
+      15894.299999982119
+     ],
+     [
+      "drone-hit",
+      16147.899999976158
+     ],
+     [
+      "drone-spawn",
+      16151.399999976158
+     ],
+     [
+      "drone-hit",
+      16405.19999998808
+     ],
+     [
+      "drone-spawn",
+      16409.29999998212
+     ],
+     [
+      "drone-hit",
+      16663.5
+     ],
+     [
+      "drone-spawn",
+      16667.899999976158
+     ],
+     [
+      "drone-hit",
+      16923.29999998212
+     ],
+     [
+      "drone-spawn",
+      16926.79999998212
+     ],
+     [
+      "drone-hit",
+      17184.19999998808
+     ],
+     [
+      "drone-spawn",
+      17185.79999998212
+     ],
+     [
+      "drone-hit",
+      17439.59999999404
+     ],
+     [
+      "drone-spawn",
+      17443.29999998212
+     ],
+     [
+      "drone-hit",
+      17705.29999998212
+     ],
+     [
+      "drone-spawn",
+      17709.59999999404
+     ],
+     [
+      "drone-hit",
+      17964.399999976158
+     ],
+     [
+      "drone-spawn",
+      17968
+     ],
+     [
+      "drone-hit",
+      18225.399999976158
+     ],
+     [
+      "drone-spawn",
+      18226.399999976158
+     ],
+     [
+      "drone-hit",
+      18492.19999998808
+     ],
+     [
+      "drone-spawn",
+      18493.399999976158
+     ],
+     [
+      "drone-hit",
+      18748.19999998808
+     ],
+     [
+      "drone-spawn",
+      18751.399999976158
+     ],
+     [
+      "drone-hit",
+      19008.59999999404
+     ],
+     [
+      "drone-spawn",
+      19009.79999998212
+     ],
+     [
+      "drone-hit",
+      19267.59999999404
+     ],
+     [
+      "drone-spawn",
+      19268.09999999404
+     ],
+     [
+      "drone-hit",
+      19522.69999998808
+     ],
+     [
+      "drone-spawn",
+      19526.399999976158
+     ],
+     [
+      "drone-hit",
+      19790
+     ],
+     [
+      "drone-spawn",
+      19793.09999999404
+     ],
+     [
+      "drone-hit",
+      20047.79999998212
+     ],
+     [
+      "drone-spawn",
+      20051.399999976158
+     ],
+     [
+      "drone-hit",
+      20305.5
+     ],
+     [
+      "drone-spawn",
+      20309
+     ],
+     [
+      "drone-hit",
+      20564.69999998808
+     ],
+     [
+      "drone-spawn",
+      20568.19999998808
+     ],
+     [
+      "drone-hit",
+      20824.899999976158
+     ],
+     [
+      "drone-spawn",
+      20825.79999998212
+     ],
+     [
+      "drone-hit",
+      21081.19999998808
+     ],
+     [
+      "drone-spawn",
+      21084.69999998808
+     ],
+     [
+      "drone-hit",
+      21341.09999999404
+     ],
+     [
+      "drone-spawn",
+      21342.79999998212
+     ],
+     [
+      "drone-hit",
+      21598.19999998808
+     ],
+     [
+      "drone-spawn",
+      21600.69999998808
+     ],
+     [
+      "drone-hit",
+      21855.59999999404
+     ],
+     [
+      "drone-spawn",
+      21859.79999998212
+     ],
+     [
+      "drone-hit",
+      22115.29999998212
+     ],
+     [
+      "drone-spawn",
+      22118.09999999404
+     ],
+     [
+      "drone-hit",
+      22374.79999998212
+     ],
+     [
+      "drone-spawn",
+      22376.5
+     ],
+     [
+      "drone-hit",
+      22632.5
+     ],
+     [
+      "drone-spawn",
+      22633.899999976158
+     ],
+     [
+      "drone-hit",
+      22900.899999976158
+     ],
+     [
+      "drone-spawn",
+      22902.29999998212
+     ],
+     [
+      "drone-hit",
+      23161.19999998808
+     ],
+     [
+      "drone-spawn",
+      23168.29999998212
+     ],
+     [
+      "drone-hit",
+      23424.5
+     ],
+     [
+      "drone-spawn",
+      23425.79999998212
+     ],
+     [
+      "drone-hit",
+      23682.5
+     ],
+     [
+      "drone-spawn",
+      23683.899999976158
+     ],
+     [
+      "drone-hit",
+      23941.29999998212
+     ],
+     [
+      "drone-spawn",
+      23942.29999998212
+     ],
+     [
+      "drone-hit",
+      24200
+     ],
+     [
+      "drone-spawn",
+      24201
+     ],
+     [
+      "drone-hit",
+      24456
+     ],
+     [
+      "drone-spawn",
+      24459.79999998212
+     ],
+     [
+      "drone-hit",
+      24716.29999998212
+     ],
+     [
+      "drone-spawn",
+      24718.09999999404
+     ],
+     [
+      "drone-hit",
+      24973
+     ],
+     [
+      "drone-spawn",
+      24976.69999998808
+     ],
+     [
+      "drone-hit",
+      25238.19999998808
+     ],
+     [
+      "drone-spawn",
+      25242.29999998212
+     ],
+     [
+      "drone-hit",
+      25500.09999999404
+     ],
+     [
+      "drone-spawn",
+      25500.899999976158
+     ],
+     [
+      "drone-hit",
+      25756.09999999404
+     ],
+     [
+      "drone-spawn",
+      25759.69999998808
+     ],
+     [
+      "drone-hit",
+      26014
+     ],
+     [
+      "drone-spawn",
+      26018
+     ],
+     [
+      "drone-hit",
+      26273.09999999404
+     ],
+     [
+      "drone-spawn",
+      26275.79999998212
+     ],
+     [
+      "drone-hit",
+      26531.29999998212
+     ],
+     [
+      "drone-spawn",
+      26533.79999998212
+     ],
+     [
+      "drone-hit",
+      26789.79999998212
+     ],
+     [
+      "drone-spawn",
+      26792.19999998808
+     ],
+     [
+      "drone-hit",
+      27048.19999998808
+     ],
+     [
+      "drone-spawn",
+      27051.29999998212
+     ],
+     [
+      "drone-hit",
+      27310.79999998212
+     ],
+     [
+      "drone-spawn",
+      27312.29999998212
+     ],
+     [
+      "drone-hit",
+      27564.09999999404
+     ],
+     [
+      "drone-spawn",
+      27568
+     ],
+     [
+      "drone-hit",
+      27822.29999998212
+     ],
+     [
+      "drone-spawn",
+      27826.29999998212
+     ],
+     [
+      "drone-hit",
+      28080.09999999404
+     ],
+     [
+      "drone-spawn",
+      28084.79999998212
+     ],
+     [
+      "drone-hit",
+      28340.899999976158
+     ],
+     [
+      "drone-spawn",
+      28343.09999999404
+     ],
+     [
+      "drone-hit",
+      28598.19999998808
+     ],
+     [
+      "drone-spawn",
+      28601.09999999404
+     ],
+     [
+      "drone-hit",
+      28858
+     ],
+     [
+      "drone-spawn",
+      28859
+     ],
+     [
+      "drone-hit",
+      29114.5
+     ],
+     [
+      "drone-spawn",
+      29118.19999998808
+     ],
+     [
+      "drone-hit",
+      29373.79999998212
+     ],
+     [
+      "drone-spawn",
+      29376.5
+     ],
+     [
+      "drone-hit",
+      29631.79999998212
+     ],
+     [
+      "drone-spawn",
+      29634.79999998212
+     ],
+     [
+      "drone-hit",
+      29914.79999998212
+     ],
+     [
+      "drone-spawn",
+      29918.09999999404
+     ],
+     [
+      "drone-hit",
+      30179.79999998212
+     ],
+     [
+      "drone-spawn",
+      30184.69999998808
+     ],
+     [
+      "drone-hit",
+      30440.59999999404
+     ],
+     [
+      "drone-spawn",
+      30443.09999999404
+     ],
+     [
+      "drone-hit",
+      30699.09999999404
+     ],
+     [
+      "drone-spawn",
+      30701.59999999404
+     ],
+     [
+      "drone-hit",
+      30958.59999999404
+     ],
+     [
+      "drone-spawn",
+      30959.399999976158
+     ],
+     [
+      "drone-hit",
+      31215.19999998808
+     ],
+     [
+      "drone-spawn",
+      31218.399999976158
+     ],
+     [
+      "drone-hit",
+      31474.5
+     ],
+     [
+      "drone-spawn",
+      31476.5
+     ],
+     [
+      "drone-hit",
+      31731.19999998808
+     ],
+     [
+      "drone-spawn",
+      31734
+     ],
+     [
+      "drone-hit",
+      31990.29999998212
+     ],
+     [
+      "drone-spawn",
+      31993.09999999404
+     ],
+     [
+      "drone-hit",
+      32247.29999998212
+     ],
+     [
+      "drone-spawn",
+      32251.5
+     ],
+     [
+      "drone-hit",
+      32507.69999998808
+     ],
+     [
+      "drone-spawn",
+      32510
+     ],
+     [
+      "drone-hit",
+      32764.69999998808
+     ],
+     [
+      "drone-spawn",
+      32768.09999999404
+     ],
+     [
+      "drone-hit",
+      33022.59999999404
+     ],
+     [
+      "drone-spawn",
+      33026
+     ],
+     [
+      "drone-hit",
+      33280.79999998212
+     ],
+     [
+      "drone-spawn",
+      33284.79999998212
+     ],
+     [
+      "drone-hit",
+      33543.29999998212
+     ],
+     [
+      "drone-spawn",
+      33544.39999997616
+     ],
+     [
+      "drone-hit",
+      33799.39999997616
+     ],
+     [
+      "drone-spawn",
+      33801.39999997616
+     ],
+     [
+      "drone-hit",
+      34057.29999998212
+     ],
+     [
+      "drone-spawn",
+      34059.59999999404
+     ],
+     [
+      "drone-hit",
+      34315.69999998808
+     ],
+     [
+      "drone-spawn",
+      34318.19999998808
+     ],
+     [
+      "drone-hit",
+      34572.79999998212
+     ],
+     [
+      "drone-spawn",
+      34575.89999997616
+     ],
+     [
+      "drone-hit",
+      34835
+     ],
+     [
+      "drone-spawn",
+      34835.79999998212
+     ],
+     [
+      "drone-hit",
+      35091.69999998808
+     ],
+     [
+      "drone-spawn",
+      35093.5
+     ],
+     [
+      "drone-hit",
+      35349.59999999404
+     ],
+     [
+      "drone-spawn",
+      35351.09999999404
+     ],
+     [
+      "drone-hit",
+      35608.19999998808
+     ],
+     [
+      "drone-spawn",
+      35609.59999999404
+     ],
+     [
+      "drone-hit",
+      35864.59999999404
+     ],
+     [
+      "drone-spawn",
+      35867.69999998808
+     ],
+     [
+      "clear",
+      35892.69999998808
+     ],
+     [
+      "comet-bonus",
+      39135.29999998212
+     ],
+     [
+      "comet-bonus",
+      42134.89999997616
+     ],
+     [
+      "comet-bonus",
+      45135
+     ],
+     [
+      "comet-bonus",
+      48134.19999998808
+     ],
+     [
+      "comet-bonus",
+      51135
+     ],
+     [
+      "comet-bonus",
+      54134.79999998212
+     ],
+     [
+      "clear",
+      55893.29999998212
+     ]
+    ],
+    "window": [
+     [
+      "STAGE_LIGHTNING",
+      {
+       "x": 0,
+       "y": 33,
+       "focus": true,
+       "vis": "visible"
+      }
+     ],
+     [
+      "STAGE_DRONES",
+      {
+       "x": 0,
+       "y": 33,
+       "focus": true,
+       "vis": "visible"
+      }
+     ],
+     [
+      "STAGE_COMET",
+      {
+       "x": 0,
+       "y": 33,
+       "focus": true,
+       "vis": "visible"
+      }
+     ]
+    ]
+   },
+   "result": {
+    "text": "RUN COMPLETE\n\n72,380m\n\nDead-Eye\nSky's The Limit\n\nReaction\n253 ms\n77\nFlick\n256 ms\n95\nPrecision\n100%\n100\nTracking\n99%\n99\n\n5/5 strikes · 0 too early · 77 drones · 0 escaped · 19.8 s best lock\n\nFirst run of the day!\n\nENTER INITIALS",
+    "altitude": "72,380m",
+    "title": "Dead-Eye",
+    "tier": "Sky's The Limit",
+    "bars": [
+     {
+      "label": "Reaction",
+      "raw": "253 ms",
+      "score": 77
+     },
+     {
+      "label": "Flick",
+      "raw": "256 ms",
+      "score": 95
+     },
+     {
+      "label": "Precision",
+      "raw": "100%",
+      "score": 100
+     },
+     {
+      "label": "Tracking",
+      "raw": "99%",
+      "score": 99
+     }
+    ],
+    "detail": "5/5 strikes · 0 too early · 77 drones · 0 escaped · 19.8 s best lock",
+    "beat": "First run of the day!"
+   },
+   "wall_s": 78.8,
+   "results_to_attract_s": 25.0,
+   "external_input_after_results": {
+    "pointermove": 0,
+    "pointerdown": 0,
+    "click": 0,
+    "keydown": 0,
+    "wheel": 0
+   },
+   "long_frames": [
+    {
+     "phase": "COUNTDOWN",
+     "in_phase_s": 0.03,
+     "interval": 25.9,
+     "work": 0.1,
+     "nearest_event": null,
+     "event_to_gap_ms": null
+    }
+   ],
+   "phase_stats": {
+    "ATTRACT": {
+     "frames": 191,
+     "interval_p50": 8.30000000000291,
+     "interval_p95": 9.19999999999709,
+     "interval_max": 9.39999999999418,
+     "work_p50": 0.10000002384185791,
+     "work_p95": 0.4000000059604645,
+     "work_max": 0.699999988079071,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "COUNTDOWN": {
+     "frames": 358,
+     "interval_p50": 8.300000000000182,
+     "interval_p95": 9.299999999999272,
+     "interval_max": 25.90000000000009,
+     "work_p50": 0.10000002384185791,
+     "work_p95": 0.4000000059604645,
+     "work_max": 0.800000011920929,
+     "over25": 1,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "STAGE_LIGHTNING": {
+     "frames": 1285,
+     "interval_p50": 8.300000000000182,
+     "interval_p95": 9.199999999998909,
+     "interval_max": 9.400000000000546,
+     "work_p50": 0.10000002384185791,
+     "work_p95": 0.4000000059604645,
+     "work_max": 2.300000011920929,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "STAGE_DRONES": {
+     "frames": 2400,
+     "interval_p50": 8.299999999999272,
+     "interval_p95": 9.200000000000728,
+     "interval_max": 9.400000000001455,
+     "work_p50": 0.29999998211860657,
+     "work_p95": 0.5999999940395355,
+     "work_max": 2.300000011920929,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "STAGE_COMET": {
+     "frames": 2400,
+     "interval_p50": 8.30000000000291,
+     "interval_p95": 9.10000000000582,
+     "interval_max": 10.400000000001455,
+     "work_p50": 0.19999998807907104,
+     "work_p95": 0.5,
+     "work_max": 7,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "RESULTS": {
+     "frames": 3001,
+     "interval_p50": 8.30000000000291,
+     "interval_p95": 9.10000000000582,
+     "interval_max": 9.400000000001455,
+     "work_p50": 0.19999998807907104,
+     "work_p95": 0.4000000059604645,
+     "work_max": 1.5999999940395355,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    }
+   }
+  },
+  {
+   "run": 2,
+   "bot": {
+    "flashes": 5,
+    "clicks_lightning": 5,
+    "spawns": 78,
+    "drone_clicks": 78,
+    "hits": 77,
+    "misses": 0,
+    "escapes": 0,
+    "false_starts": 0,
+    "reactions": [
+     269.19999999404536,
+     283.9999999940337,
+     218.59999997615523,
+     233.09999998807325,
+     276.7999999940366
+    ],
+    "comet_frames": 2401,
+    "comet_locked": 2378,
+    "comet_bonus": 6,
+    "comet_polls": 1116,
+    "max_lock": 0.9979333333353182,
+    "events": [
+     [
+      "flash",
+      88280.69999998808
+     ],
+     [
+      "reaction",
+      88550.29999998212
+     ],
+     [
+      "flash",
+      90022.39999997616
+     ],
+     [
+      "reaction",
+      90306.59999999404
+     ],
+     [
+      "flash",
+      92422.29999998212
+     ],
+     [
+      "reaction",
+      92641.09999999404
+     ],
+     [
+      "flash",
+      94296.79999998212
+     ],
+     [
+      "reaction",
+      94530.39999997616
+     ],
+     [
+      "flash",
+      97464.09999999404
+     ],
+     [
+      "reaction",
+      97741.29999998212
+     ],
+     [
+      "clear",
+      97747.19999998808
+     ],
+     [
+      "drone-spawn",
+      97748.19999998808
+     ],
+     [
+      "drone-hit",
+      98005.89999997616
+     ],
+     [
+      "drone-spawn",
+      98007.59999999404
+     ],
+     [
+      "drone-hit",
+      98260.59999999404
+     ],
+     [
+      "drone-spawn",
+      98263.89999997616
+     ],
+     [
+      "drone-hit",
+      98518.79999998212
+     ],
+     [
+      "drone-spawn",
+      98522.29999998212
+     ],
+     [
+      "drone-hit",
+      98778.79999998212
+     ],
+     [
+      "drone-spawn",
+      98779.79999998212
+     ],
+     [
+      "drone-hit",
+      99035.79999998212
+     ],
+     [
+      "drone-spawn",
+      99038.19999998808
+     ],
+     [
+      "drone-hit",
+      99293.79999998212
+     ],
+     [
+      "drone-spawn",
+      99297.39999997616
+     ],
+     [
+      "drone-hit",
+      99554.69999998808
+     ],
+     [
+      "drone-spawn",
+      99556.29999998212
+     ],
+     [
+      "drone-hit",
+      99810.89999997616
+     ],
+     [
+      "drone-spawn",
+      99814
+     ],
+     [
+      "drone-hit",
+      100071.09999999404
+     ],
+     [
+      "drone-spawn",
+      100072.5
+     ],
+     [
+      "drone-hit",
+      100327.19999998808
+     ],
+     [
+      "drone-spawn",
+      100330.59999999404
+     ],
+     [
+      "drone-hit",
+      100587.29999998212
+     ],
+     [
+      "drone-spawn",
+      100588.69999998808
+     ],
+     [
+      "drone-hit",
+      100843.39999997616
+     ],
+     [
+      "drone-spawn",
+      100846.79999998212
+     ],
+     [
+      "drone-hit",
+      101103.89999997616
+     ],
+     [
+      "drone-spawn",
+      101105.59999999404
+     ],
+     [
+      "drone-hit",
+      101362.89999997616
+     ],
+     [
+      "drone-spawn",
+      101364.29999998212
+     ],
+     [
+      "drone-hit",
+      101619.89999997616
+     ],
+     [
+      "drone-spawn",
+      101622
+     ],
+     [
+      "drone-hit",
+      101878.89999997616
+     ],
+     [
+      "drone-spawn",
+      101880.69999998808
+     ],
+     [
+      "drone-hit",
+      102137.19999998808
+     ],
+     [
+      "drone-spawn",
+      102139.09999999404
+     ],
+     [
+      "drone-hit",
+      102395.19999998808
+     ],
+     [
+      "drone-spawn",
+      102397.39999997616
+     ],
+     [
+      "drone-hit",
+      102653.59999999404
+     ],
+     [
+      "drone-spawn",
+      102655.79999998212
+     ],
+     [
+      "drone-hit",
+      102912.19999998808
+     ],
+     [
+      "drone-spawn",
+      102913.29999998212
+     ],
+     [
+      "drone-hit",
+      103170.29999998212
+     ],
+     [
+      "drone-spawn",
+      103172
+     ],
+     [
+      "drone-hit",
+      103429
+     ],
+     [
+      "drone-spawn",
+      103430.79999998212
+     ],
+     [
+      "drone-hit",
+      103687.79999998212
+     ],
+     [
+      "drone-spawn",
+      103689.19999998808
+     ],
+     [
+      "drone-hit",
+      103944.59999999404
+     ],
+     [
+      "drone-spawn",
+      103946.5
+     ],
+     [
+      "drone-hit",
+      104205.79999998212
+     ],
+     [
+      "drone-spawn",
+      104207.29999998212
+     ],
+     [
+      "drone-hit",
+      104470
+     ],
+     [
+      "drone-spawn",
+      104472.5
+     ],
+     [
+      "drone-hit",
+      104726.69999998808
+     ],
+     [
+      "drone-spawn",
+      104730.39999997616
+     ],
+     [
+      "drone-hit",
+      104989.19999998808
+     ],
+     [
+      "drone-spawn",
+      104990
+     ],
+     [
+      "drone-hit",
+      105245.19999998808
+     ],
+     [
+      "drone-spawn",
+      105247.5
+     ],
+     [
+      "drone-hit",
+      105504.5
+     ],
+     [
+      "drone-spawn",
+      105505.59999999404
+     ],
+     [
+      "drone-hit",
+      105761.09999999404
+     ],
+     [
+      "drone-spawn",
+      105764
+     ],
+     [
+      "drone-hit",
+      106021.89999997616
+     ],
+     [
+      "drone-spawn",
+      106022.59999999404
+     ],
+     [
+      "drone-hit",
+      106276.19999998808
+     ],
+     [
+      "drone-spawn",
+      106280.79999998212
+     ],
+     [
+      "drone-hit",
+      106539.09999999404
+     ],
+     [
+      "drone-spawn",
+      106540.29999998212
+     ],
+     [
+      "drone-hit",
+      106796
+     ],
+     [
+      "drone-spawn",
+      106797.59999999404
+     ],
+     [
+      "drone-hit",
+      107053.29999998212
+     ],
+     [
+      "drone-spawn",
+      107055
+     ],
+     [
+      "drone-hit",
+      107313.5
+     ],
+     [
+      "drone-spawn",
+      107314.89999997616
+     ],
+     [
+      "drone-hit",
+      107578.89999997616
+     ],
+     [
+      "drone-spawn",
+      107580.5
+     ],
+     [
+      "drone-hit",
+      107838.89999997616
+     ],
+     [
+      "drone-spawn",
+      107840.29999998212
+     ],
+     [
+      "drone-hit",
+      108093.5
+     ],
+     [
+      "drone-spawn",
+      108097.29999998212
+     ],
+     [
+      "drone-hit",
+      108353.79999998212
+     ],
+     [
+      "drone-spawn",
+      108355
+     ],
+     [
+      "drone-hit",
+      108613.5
+     ],
+     [
+      "drone-spawn",
+      108614.29999998212
+     ],
+     [
+      "drone-hit",
+      108868.79999998212
+     ],
+     [
+      "drone-spawn",
+      108872.5
+     ],
+     [
+      "drone-hit",
+      109130.29999998212
+     ],
+     [
+      "drone-spawn",
+      109131.39999997616
+     ],
+     [
+      "drone-hit",
+      109388.89999997616
+     ],
+     [
+      "drone-spawn",
+      109389.89999997616
+     ],
+     [
+      "drone-hit",
+      109644.29999998212
+     ],
+     [
+      "drone-spawn",
+      109647.39999997616
+     ],
+     [
+      "drone-hit",
+      109904.19999998808
+     ],
+     [
+      "drone-spawn",
+      109905.69999998808
+     ],
+     [
+      "drone-hit",
+      110159.5
+     ],
+     [
+      "drone-spawn",
+      110164
+     ],
+     [
+      "drone-hit",
+      110420.59999999404
+     ],
+     [
+      "drone-spawn",
+      110422.29999998212
+     ],
+     [
+      "drone-hit",
+      110677.79999998212
+     ],
+     [
+      "drone-spawn",
+      110680.89999997616
+     ],
+     [
+      "drone-hit",
+      110937.69999998808
+     ],
+     [
+      "drone-spawn",
+      110939.09999999404
+     ],
+     [
+      "drone-hit",
+      111195.89999997616
+     ],
+     [
+      "drone-spawn",
+      111197.19999998808
+     ],
+     [
+      "drone-hit",
+      111453
+     ],
+     [
+      "drone-spawn",
+      111455.69999998808
+     ],
+     [
+      "drone-hit",
+      111713.09999999404
+     ],
+     [
+      "drone-spawn",
+      111713.79999998212
+     ],
+     [
+      "drone-hit",
+      111968.89999997616
+     ],
+     [
+      "drone-spawn",
+      111972.19999998808
+     ],
+     [
+      "drone-hit",
+      112230.29999998212
+     ],
+     [
+      "drone-spawn",
+      112231.39999997616
+     ],
+     [
+      "drone-hit",
+      112489.29999998212
+     ],
+     [
+      "drone-spawn",
+      112490.5
+     ],
+     [
+      "drone-hit",
+      112745
+     ],
+     [
+      "drone-spawn",
+      112746.79999998212
+     ],
+     [
+      "drone-hit",
+      113003.79999998212
+     ],
+     [
+      "drone-spawn",
+      113005.59999999404
+     ],
+     [
+      "drone-hit",
+      113262.89999997616
+     ],
+     [
+      "drone-spawn",
+      113264.39999997616
+     ],
+     [
+      "drone-hit",
+      113520
+     ],
+     [
+      "drone-spawn",
+      113521.79999998212
+     ],
+     [
+      "drone-hit",
+      113787.5
+     ],
+     [
+      "drone-spawn",
+      113789
+     ],
+     [
+      "drone-hit",
+      114043.89999997616
+     ],
+     [
+      "drone-spawn",
+      114047.29999998212
+     ],
+     [
+      "drone-hit",
+      114305
+     ],
+     [
+      "drone-spawn",
+      114306.39999997616
+     ],
+     [
+      "drone-hit",
+      114561.89999997616
+     ],
+     [
+      "drone-spawn",
+      114563.29999998212
+     ],
+     [
+      "drone-hit",
+      114822.29999998212
+     ],
+     [
+      "drone-spawn",
+      114822.89999997616
+     ],
+     [
+      "drone-hit",
+      115079.89999997616
+     ],
+     [
+      "drone-spawn",
+      115081.29999998212
+     ],
+     [
+      "drone-hit",
+      115334.69999998808
+     ],
+     [
+      "drone-spawn",
+      115338.39999997616
+     ],
+     [
+      "drone-hit",
+      115592.79999998212
+     ],
+     [
+      "drone-spawn",
+      115597.29999998212
+     ],
+     [
+      "drone-hit",
+      115853.29999998212
+     ],
+     [
+      "drone-spawn",
+      115855
+     ],
+     [
+      "drone-hit",
+      116111.59999999404
+     ],
+     [
+      "drone-spawn",
+      116114.09999999404
+     ],
+     [
+      "drone-hit",
+      116377.69999998808
+     ],
+     [
+      "drone-spawn",
+      116380.39999997616
+     ],
+     [
+      "drone-hit",
+      116635.89999997616
+     ],
+     [
+      "drone-spawn",
+      116638.19999998808
+     ],
+     [
+      "drone-hit",
+      116895.29999998212
+     ],
+     [
+      "drone-spawn",
+      116896.59999999404
+     ],
+     [
+      "drone-hit",
+      117152.89999997616
+     ],
+     [
+      "drone-spawn",
+      117155.79999998212
+     ],
+     [
+      "drone-hit",
+      117413.69999998808
+     ],
+     [
+      "drone-spawn",
+      117414.79999998212
+     ],
+     [
+      "drone-hit",
+      117670.29999998212
+     ],
+     [
+      "drone-spawn",
+      117672.19999998808
+     ],
+     [
+      "clear",
+      117747.89999997616
+     ],
+     [
+      "comet-bonus",
+      120939
+     ],
+     [
+      "comet-bonus",
+      123939.29999998212
+     ],
+     [
+      "comet-bonus",
+      126939.09999999404
+     ],
+     [
+      "comet-bonus",
+      129939.39999997616
+     ],
+     [
+      "comet-bonus",
+      132939.09999999404
+     ],
+     [
+      "comet-bonus",
+      135939.09999999404
+     ],
+     [
+      "clear",
+      137747.09999999404
+     ]
+    ],
+    "window": [
+     [
+      "STAGE_LIGHTNING",
+      {
+       "x": 0,
+       "y": 33,
+       "focus": true,
+       "vis": "visible"
+      }
+     ],
+     [
+      "STAGE_DRONES",
+      {
+       "x": 0,
+       "y": 33,
+       "focus": true,
+       "vis": "visible"
+      }
+     ],
+     [
+      "STAGE_COMET",
+      {
+       "x": 0,
+       "y": 33,
+       "focus": true,
+       "vis": "visible"
+      }
+     ]
+    ]
+   },
+   "result": {
+    "text": "RUN COMPLETE\n\n72,350m\n\nDead-Eye\nSky's The Limit\n\nReaction\n256 ms\n76\nFlick\n256 ms\n95\nPrecision\n100%\n100\nTracking\n99%\n99\n\n5/5 strikes · 0 too early · 77 drones · 0 escaped · 19.8 s best lock\n\nBeat today’s #1: 72,380 m\n\nENTER INITIALS",
+    "altitude": "72,350m",
+    "title": "Dead-Eye",
+    "tier": "Sky's The Limit",
+    "bars": [
+     {
+      "label": "Reaction",
+      "raw": "256 ms",
+      "score": 76
+     },
+     {
+      "label": "Flick",
+      "raw": "256 ms",
+      "score": 95
+     },
+     {
+      "label": "Precision",
+      "raw": "100%",
+      "score": 100
+     },
+     {
+      "label": "Tracking",
+      "raw": "99%",
+      "score": 99
+     }
+    ],
+    "detail": "5/5 strikes · 0 too early · 77 drones · 0 escaped · 19.8 s best lock",
+    "beat": "Beat today’s #1: 72,380 m"
+   },
+   "wall_s": 80.0,
+   "results_to_attract_s": 25.0,
+   "external_input_after_results": {
+    "pointermove": 0,
+    "pointerdown": 0,
+    "click": 0,
+    "keydown": 0,
+    "wheel": 0
+   },
+   "long_frames": [
+    {
+     "phase": "ATTRACT",
+     "in_phase_s": 0.03,
+     "interval": 33.4,
+     "work": 0,
+     "nearest_event": null,
+     "event_to_gap_ms": null
+    }
+   ],
+   "phase_stats": {
+    "ATTRACT": {
+     "frames": 219,
+     "interval_p50": 8.30000000000291,
+     "interval_p95": 9.299999999988358,
+     "interval_max": 33.39999999999418,
+     "work_p50": 0.09999999403953552,
+     "work_p95": 0.30000001192092896,
+     "work_max": 0.5,
+     "over25": 1,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "COUNTDOWN": {
+     "frames": 360,
+     "interval_p50": 8.30000000000291,
+     "interval_p95": 9.10000000000582,
+     "interval_max": 9.39999999999418,
+     "work_p50": 0.19999998807907104,
+     "work_p95": 0.4000000059604645,
+     "work_max": 0.7000000178813934,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "STAGE_LIGHTNING": {
+     "frames": 1436,
+     "interval_p50": 8.30000000000291,
+     "interval_p95": 9.10000000000582,
+     "interval_max": 9.39999999999418,
+     "work_p50": 0.10000002384185791,
+     "work_p95": 0.4000000059604645,
+     "work_max": 1.4000000059604645,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "STAGE_DRONES": {
+     "frames": 2400,
+     "interval_p50": 8.30000000000291,
+     "interval_p95": 9.19999999999709,
+     "interval_max": 9.39999999999418,
+     "work_p50": 0.3999999761581421,
+     "work_p95": 0.6000000238418579,
+     "work_max": 1.800000011920929,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "STAGE_COMET": {
+     "frames": 2400,
+     "interval_p50": 8.30000000000291,
+     "interval_p95": 9.199999999982538,
+     "interval_max": 9.400000000023283,
+     "work_p50": 0.19999998807907104,
+     "work_p95": 0.6000000238418579,
+     "work_max": 2.5,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "RESULTS": {
+     "frames": 3001,
+     "interval_p50": 8.300000000017462,
+     "interval_p95": 9.10000000000582,
+     "interval_max": 9.400000000023283,
+     "work_p50": 0.10000002384185791,
+     "work_p95": 0.30000001192092896,
+     "work_max": 2.0999999940395355,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    }
+   }
+  },
+  {
+   "run": 3,
+   "bot": {
+    "flashes": 5,
+    "clicks_lightning": 5,
+    "spawns": 78,
+    "drone_clicks": 78,
+    "hits": 77,
+    "misses": 0,
+    "escapes": 0,
+    "false_starts": 0,
+    "reactions": [
+     252.29999999405118,
+     240.29999999405118,
+     254.19999998807907,
+     280.59999998807325,
+     227
+    ],
+    "comet_frames": 2401,
+    "comet_locked": 2382,
+    "comet_bonus": 4,
+    "comet_polls": 1142,
+    "max_lock": 0.9989333333353182,
+    "events": [
+     [
+      "flash",
+      169397.79999998212
+     ],
+     [
+      "reaction",
+      169650.09999999404
+     ],
+     [
+      "flash",
+      171555
+     ],
+     [
+      "reaction",
+      171795.59999999404
+     ],
+     [
+      "flash",
+      174705.59999999404
+     ],
+     [
+      "reaction",
+      174960.19999998808
+     ],
+     [
+      "flash",
+      177413.79999998212
+     ],
+     [
+      "reaction",
+      177694.69999998808
+     ],
+     [
+      "flash",
+      179730.69999998808
+     ],
+     [
+      "reaction",
+      179957.89999997616
+     ],
+     [
+      "clear",
+      179963.59999999404
+     ],
+     [
+      "drone-spawn",
+      179964.09999999404
+     ],
+     [
+      "drone-hit",
+      180218.29999998212
+     ],
+     [
+      "drone-spawn",
+      180222.39999997616
+     ],
+     [
+      "drone-hit",
+      180477
+     ],
+     [
+      "drone-spawn",
+      180480.29999998212
+     ],
+     [
+      "drone-hit",
+      180735
+     ],
+     [
+      "drone-spawn",
+      180739
+     ],
+     [
+      "drone-hit",
+      180993
+     ],
+     [
+      "drone-spawn",
+      180997.39999997616
+     ],
+     [
+      "drone-hit",
+      181251.79999998212
+     ],
+     [
+      "drone-spawn",
+      181255.59999999404
+     ],
+     [
+      "drone-hit",
+      181509.79999998212
+     ],
+     [
+      "drone-spawn",
+      181514.09999999404
+     ],
+     [
+      "drone-hit",
+      181768
+     ],
+     [
+      "drone-spawn",
+      181771.79999998212
+     ],
+     [
+      "drone-hit",
+      182025.79999998212
+     ],
+     [
+      "drone-spawn",
+      182030.29999998212
+     ],
+     [
+      "drone-hit",
+      182284.19999998808
+     ],
+     [
+      "drone-spawn",
+      182288.79999998212
+     ],
+     [
+      "drone-hit",
+      182544.59999999404
+     ],
+     [
+      "drone-spawn",
+      182547.19999998808
+     ],
+     [
+      "drone-hit",
+      182800.79999998212
+     ],
+     [
+      "drone-spawn",
+      182805.69999998808
+     ],
+     [
+      "drone-hit",
+      183059.79999998212
+     ],
+     [
+      "drone-spawn",
+      183064.09999999404
+     ],
+     [
+      "drone-hit",
+      183318
+     ],
+     [
+      "drone-spawn",
+      183322.29999998212
+     ],
+     [
+      "drone-hit",
+      183576.39999997616
+     ],
+     [
+      "drone-spawn",
+      183580.69999998808
+     ],
+     [
+      "drone-hit",
+      183834.89999997616
+     ],
+     [
+      "drone-spawn",
+      183839
+     ],
+     [
+      "drone-hit",
+      184093.09999999404
+     ],
+     [
+      "drone-spawn",
+      184096.89999997616
+     ],
+     [
+      "drone-hit",
+      184351.69999998808
+     ],
+     [
+      "drone-spawn",
+      184355.69999998808
+     ],
+     [
+      "drone-hit",
+      184609.5
+     ],
+     [
+      "drone-spawn",
+      184614.09999999404
+     ],
+     [
+      "drone-hit",
+      184868
+     ],
+     [
+      "drone-spawn",
+      184872.39999997616
+     ],
+     [
+      "drone-hit",
+      185126.29999998212
+     ],
+     [
+      "drone-spawn",
+      185130.69999998808
+     ],
+     [
+      "drone-hit",
+      185384.79999998212
+     ],
+     [
+      "drone-spawn",
+      185389.09999999404
+     ],
+     [
+      "drone-hit",
+      185643.19999998808
+     ],
+     [
+      "drone-spawn",
+      185647.39999997616
+     ],
+     [
+      "drone-hit",
+      185901.5
+     ],
+     [
+      "drone-spawn",
+      185904.79999998212
+     ],
+     [
+      "drone-hit",
+      186160.19999998808
+     ],
+     [
+      "drone-spawn",
+      186164.09999999404
+     ],
+     [
+      "drone-hit",
+      186418.29999998212
+     ],
+     [
+      "drone-spawn",
+      186422.09999999404
+     ],
+     [
+      "drone-hit",
+      186676.89999997616
+     ],
+     [
+      "drone-spawn",
+      186680.69999998808
+     ],
+     [
+      "drone-hit",
+      186934.89999997616
+     ],
+     [
+      "drone-spawn",
+      186939
+     ],
+     [
+      "drone-hit",
+      187193.09999999404
+     ],
+     [
+      "drone-spawn",
+      187197.39999997616
+     ],
+     [
+      "drone-hit",
+      187450.89999997616
+     ],
+     [
+      "drone-spawn",
+      187455.39999997616
+     ],
+     [
+      "drone-hit",
+      187712.09999999404
+     ],
+     [
+      "drone-spawn",
+      187713.5
+     ],
+     [
+      "drone-hit",
+      187968.19999998808
+     ],
+     [
+      "drone-spawn",
+      187972.5
+     ],
+     [
+      "drone-hit",
+      188228.69999998808
+     ],
+     [
+      "drone-spawn",
+      188230.29999998212
+     ],
+     [
+      "drone-hit",
+      188486.19999998808
+     ],
+     [
+      "drone-spawn",
+      188490.09999999404
+     ],
+     [
+      "drone-hit",
+      188745.19999998808
+     ],
+     [
+      "drone-spawn",
+      188746.5
+     ],
+     [
+      "drone-hit",
+      189001.69999998808
+     ],
+     [
+      "drone-spawn",
+      189005.89999997616
+     ],
+     [
+      "drone-hit",
+      189260.29999998212
+     ],
+     [
+      "drone-spawn",
+      189264.19999998808
+     ],
+     [
+      "drone-hit",
+      189521.79999998212
+     ],
+     [
+      "drone-spawn",
+      189523.09999999404
+     ],
+     [
+      "drone-hit",
+      189776.79999998212
+     ],
+     [
+      "drone-spawn",
+      189780.79999998212
+     ],
+     [
+      "drone-hit",
+      190033.89999997616
+     ],
+     [
+      "drone-spawn",
+      190039.09999999404
+     ],
+     [
+      "drone-hit",
+      190296.79999998212
+     ],
+     [
+      "drone-spawn",
+      190297.89999997616
+     ],
+     [
+      "drone-hit",
+      190553.59999999404
+     ],
+     [
+      "drone-spawn",
+      190555.79999998212
+     ],
+     [
+      "drone-hit",
+      190810.09999999404
+     ],
+     [
+      "drone-spawn",
+      190814.09999999404
+     ],
+     [
+      "drone-hit",
+      191068.39999997616
+     ],
+     [
+      "drone-spawn",
+      191071.5
+     ],
+     [
+      "drone-hit",
+      191326.39999997616
+     ],
+     [
+      "drone-spawn",
+      191330.79999998212
+     ],
+     [
+      "drone-hit",
+      191584.59999999404
+     ],
+     [
+      "drone-spawn",
+      191589
+     ],
+     [
+      "drone-hit",
+      191843
+     ],
+     [
+      "drone-spawn",
+      191847.5
+     ],
+     [
+      "drone-hit",
+      192101.79999998212
+     ],
+     [
+      "drone-spawn",
+      192105.69999998808
+     ],
+     [
+      "drone-hit",
+      192360.19999998808
+     ],
+     [
+      "drone-spawn",
+      192364.09999999404
+     ],
+     [
+      "drone-hit",
+      192618.5
+     ],
+     [
+      "drone-spawn",
+      192622.5
+     ],
+     [
+      "drone-hit",
+      192877
+     ],
+     [
+      "drone-spawn",
+      192880.79999998212
+     ],
+     [
+      "drone-hit",
+      193136.5
+     ],
+     [
+      "drone-spawn",
+      193138.19999998808
+     ],
+     [
+      "drone-hit",
+      193395.69999998808
+     ],
+     [
+      "drone-spawn",
+      193396.69999998808
+     ],
+     [
+      "drone-hit",
+      193654.09999999404
+     ],
+     [
+      "drone-spawn",
+      193655.79999998212
+     ],
+     [
+      "drone-hit",
+      193910.39999997616
+     ],
+     [
+      "drone-spawn",
+      193913.79999998212
+     ],
+     [
+      "drone-hit",
+      194168.69999998808
+     ],
+     [
+      "drone-spawn",
+      194171.59999999404
+     ],
+     [
+      "drone-hit",
+      194426.79999998212
+     ],
+     [
+      "drone-spawn",
+      194429.89999997616
+     ],
+     [
+      "drone-hit",
+      194686.59999999404
+     ],
+     [
+      "drone-spawn",
+      194689.09999999404
+     ],
+     [
+      "drone-hit",
+      194944.89999997616
+     ],
+     [
+      "drone-spawn",
+      194947.5
+     ],
+     [
+      "drone-hit",
+      195204.39999997616
+     ],
+     [
+      "drone-spawn",
+      195205.79999998212
+     ],
+     [
+      "drone-hit",
+      195460.5
+     ],
+     [
+      "drone-spawn",
+      195463.29999998212
+     ],
+     [
+      "drone-hit",
+      195720.09999999404
+     ],
+     [
+      "drone-spawn",
+      195721.89999997616
+     ],
+     [
+      "drone-hit",
+      195976.19999998808
+     ],
+     [
+      "drone-spawn",
+      195980.69999998808
+     ],
+     [
+      "drone-hit",
+      196235.19999998808
+     ],
+     [
+      "drone-spawn",
+      196238.69999998808
+     ],
+     [
+      "drone-hit",
+      196494.69999998808
+     ],
+     [
+      "drone-spawn",
+      196496.79999998212
+     ],
+     [
+      "drone-hit",
+      196755.39999997616
+     ],
+     [
+      "drone-spawn",
+      196756.59999999404
+     ],
+     [
+      "drone-hit",
+      197013.69999998808
+     ],
+     [
+      "drone-spawn",
+      197015
+     ],
+     [
+      "drone-hit",
+      197267.59999999404
+     ],
+     [
+      "drone-spawn",
+      197272.5
+     ],
+     [
+      "drone-hit",
+      197527
+     ],
+     [
+      "drone-spawn",
+      197530.89999997616
+     ],
+     [
+      "drone-hit",
+      197788.19999998808
+     ],
+     [
+      "drone-spawn",
+      197788.79999998212
+     ],
+     [
+      "drone-hit",
+      198042.89999997616
+     ],
+     [
+      "drone-spawn",
+      198047.09999999404
+     ],
+     [
+      "drone-hit",
+      198303.89999997616
+     ],
+     [
+      "drone-spawn",
+      198305.59999999404
+     ],
+     [
+      "drone-hit",
+      198560.69999998808
+     ],
+     [
+      "drone-spawn",
+      198564.19999998808
+     ],
+     [
+      "drone-hit",
+      198818.69999998808
+     ],
+     [
+      "drone-spawn",
+      198821.69999998808
+     ],
+     [
+      "drone-hit",
+      199076.39999997616
+     ],
+     [
+      "drone-spawn",
+      199080.69999998808
+     ],
+     [
+      "drone-hit",
+      199334.39999997616
+     ],
+     [
+      "drone-spawn",
+      199339.09999999404
+     ],
+     [
+      "drone-hit",
+      199593
+     ],
+     [
+      "drone-spawn",
+      199597.39999997616
+     ],
+     [
+      "drone-hit",
+      199851.89999997616
+     ],
+     [
+      "drone-spawn",
+      199855.89999997616
+     ],
+     [
+      "clear",
+      199964.39999997616
+     ],
+     [
+      "comet-bonus",
+      203121.69999998808
+     ],
+     [
+      "comet-bonus",
+      211380.79999998212
+     ],
+     [
+      "comet-bonus",
+      214381.19999998808
+     ],
+     [
+      "comet-bonus",
+      217381
+     ],
+     [
+      "clear",
+      219964.09999999404
+     ]
+    ],
+    "window": [
+     [
+      "STAGE_LIGHTNING",
+      {
+       "x": 0,
+       "y": 33,
+       "focus": true,
+       "vis": "visible"
+      }
+     ],
+     [
+      "STAGE_DRONES",
+      {
+       "x": 0,
+       "y": 33,
+       "focus": true,
+       "vis": "visible"
+      }
+     ],
+     [
+      "STAGE_COMET",
+      {
+       "x": 0,
+       "y": 33,
+       "focus": true,
+       "vis": "visible"
+      }
+     ]
+    ]
+   },
+   "result": {
+    "text": "RUN COMPLETE\n\n71,870m\n\nDead-Eye\nSky's The Limit\n\nReaction\n251 ms\n78\nFlick\n255 ms\n95\nPrecision\n100%\n100\nTracking\n99%\n99\n\n5/5 strikes · 0 too early · 77 drones · 0 escaped · 11.6 s best lock\n\nBeat today’s #1: 72,380 m\n\nENTER INITIALS",
+    "altitude": "71,870m",
+    "title": "Dead-Eye",
+    "tier": "Sky's The Limit",
+    "bars": [
+     {
+      "label": "Reaction",
+      "raw": "251 ms",
+      "score": 78
+     },
+     {
+      "label": "Flick",
+      "raw": "255 ms",
+      "score": 95
+     },
+     {
+      "label": "Precision",
+      "raw": "100%",
+      "score": 100
+     },
+     {
+      "label": "Tracking",
+      "raw": "99%",
+      "score": 99
+     }
+    ],
+    "detail": "5/5 strikes · 0 too early · 77 drones · 0 escaped · 11.6 s best lock",
+    "beat": "Beat today’s #1: 72,380 m"
+   },
+   "wall_s": 80.4,
+   "results_to_attract_s": 25.0,
+   "external_input_after_results": {
+    "pointermove": 0,
+    "pointerdown": 0,
+    "click": 0,
+    "keydown": 0,
+    "wheel": 0
+   },
+   "long_frames": [
+    {
+     "phase": "ATTRACT",
+     "in_phase_s": 0.04,
+     "interval": 42.5,
+     "work": 0.1,
+     "nearest_event": null,
+     "event_to_gap_ms": null
+    }
+   ],
+   "phase_stats": {
+    "ATTRACT": {
+     "frames": 223,
+     "interval_p50": 8.300000000017462,
+     "interval_p95": 9.200000000011642,
+     "interval_max": 42.5,
+     "work_p50": 0.09999999403953552,
+     "work_p95": 0.30000001192092896,
+     "work_max": 0.5,
+     "over25": 1,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "COUNTDOWN": {
+     "frames": 360,
+     "interval_p50": 8.300000000017462,
+     "interval_p95": 9.299999999988358,
+     "interval_max": 9.5,
+     "work_p50": 0.09999999403953552,
+     "work_p95": 0.30000001192092896,
+     "work_max": 0.5999999940395355,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "STAGE_LIGHTNING": {
+     "frames": 1481,
+     "interval_p50": 8.299999999988358,
+     "interval_p95": 9.200000000011642,
+     "interval_max": 9.39999999999418,
+     "work_p50": 0.09999999403953552,
+     "work_p95": 0.30000001192092896,
+     "work_max": 1.0999999940395355,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "STAGE_DRONES": {
+     "frames": 2400,
+     "interval_p50": 8.300000000017462,
+     "interval_p95": 9.10000000000582,
+     "interval_max": 9.39999999999418,
+     "work_p50": 0.19999998807907104,
+     "work_p95": 0.5,
+     "work_max": 1,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "STAGE_COMET": {
+     "frames": 2400,
+     "interval_p50": 8.300000000017462,
+     "interval_p95": 9.10000000000582,
+     "interval_max": 9.400000000023283,
+     "work_p50": 0.19999998807907104,
+     "work_p95": 0.4000000059604645,
+     "work_max": 1.2000000178813934,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    },
+    "RESULTS": {
+     "frames": 3001,
+     "interval_p50": 8.300000000017462,
+     "interval_p95": 9.199999999982538,
+     "interval_max": 9.400000000023283,
+     "work_p50": 0.19999998807907104,
+     "work_p95": 0.30000001192092896,
+     "work_max": 2,
+     "over25": 0,
+     "over_1_5_refresh": null,
+     "ratio_min": 1
+    }
+   }
+  }
+ ],
+ "heap": [],
+ "errors": [
+  {
+   "kind": "console",
+   "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "at": 1795140515.7270122
+  },
+  {
+   "kind": "console",
+   "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "at": 1795140517.812767
+  }
+ ],
+ "ratio_min_all": 1
+}
