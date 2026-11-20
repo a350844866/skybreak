@@ -1,7 +1,8 @@
 import { defineConfig } from '@playwright/test';
 
-// A dedicated port, so a manual `npm run preview` on 5201 never serves a stale build to the tests.
-const port = 5202;
+// A dedicated port, so a manual `npm run preview` on 5201 never serves a stale build to the
+// tests. Override it to run the e2e suite while a soak (also on 5202) is still going.
+const port = Number(process.env.SKYBREAK_TEST_PORT ?? 5202);
 
 export default defineConfig({
   timeout: 150_000,

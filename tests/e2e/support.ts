@@ -330,7 +330,12 @@ export function seeded(seed: number): () => number {
  * WebGL canvas does not preserve its drawing buffer, so readPixels is useless).
  */
 export async function cyanNear(page: Page, x: number, y: number, radius: number): Promise<number> {
-  const clip = { x: Math.max(0, x - radius), y: Math.max(0, y - radius), width: radius * 2, height: radius * 2 };
+  const { width, height } = page.viewportSize()!;
+  const left = Math.max(0, Math.floor(x - radius));
+  const top = Math.max(0, Math.floor(y - radius));
+  const clip = { x: left, y: top, width: Math.min(width, Math.ceil(x + radius)) - left,
+    height: Math.min(height, Math.ceil(y + radius)) - top };
+  if (clip.width <= 0 || clip.height <= 0) return 0; // off screen: nothing can be drawn there
   const png = (await page.screenshot({ clip })).toString('base64');
   return page.evaluate(async source => {
     const image = new Image();

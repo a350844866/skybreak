@@ -25,48 +25,54 @@ function fxReader(page: Page) {
   };
 }
 
-test('a resize mid-stage keeps the drone drawn on, and hittable at, its new position', async ({ page }) => {
-  const problems = watchProblems(page);
-  await openGame(page);
-  const log = await playRun(page, { reactionMs: [180, 220], drones: null, track: false }, { until: 'STAGE_DRONES' });
-  const fx = fxReader(page);
+test.describe('a resize mid-stage', () => {
+  // Small sizes keep SwiftShader fast enough on a 2-vCPU CI runner to catch a
+  // drone inside its 1.4 s life and to finish within the 20 s stage.
+  test.use({ viewport: { width: 800, height: 450 } });
 
-  // Like a booth operator toggling fullscreen while a drone is up: a drone that
-  // was spawned at the old size must be drawn where it is now hit-tested.
-  // SwiftShader can be too slow to capture a drone before it leaves, so retry
-  // on fresh drones; a broken re-projection fails every attempt.
-  const sizes = [{ width: 1280, height: 720 }, { width: 1600, height: 900 }];
-  let drawn = 0;
-  let stale = 0;
-  for (let attempt = 0; attempt < 3 && drawn <= 150; attempt++) {
-    if (attempt) await fx.skip();
-    const drone = attempt === 0 ? log.fx.find(event => event.type === 'drone-spawn') ?? await fx.next('drone-spawn')
-      : await fx.next('drone-spawn');
-    const [old, size] = attempt % 2 === 0 ? sizes : [sizes[1], sizes[0]];
-    await page.setViewportSize(size);
-    await page.waitForTimeout(150);
-    const x = drone.point!.x * size.width;
-    const y = drone.point!.y * size.height;
-    drawn = await cyanNear(page, x, y, 14);
-    // Where a mesh left at its old pixel position would now be drawn (y is bottom-up in world space).
-    const was = { x: drone.point!.x * old.width, y: size.height - (1 - drone.point!.y) * old.height };
-    stale = Math.hypot(was.x - x, was.y - y) > 60 ? await cyanNear(page, was.x, was.y, 14) : 0;
-  }
-  expect(drawn, 'the drone is drawn at its re-projected position').toBeGreaterThan(150);
-  expect(stale, 'nothing is drawn where the drone was before the resize').toBeLessThan(100);
+  test('keeps the drone drawn on, and hittable at, its new position', async ({ page }) => {
+    const problems = watchProblems(page);
+    await openGame(page);
+    const log = await playRun(page, { reactionMs: [180, 220], drones: null, track: false }, { until: 'STAGE_DRONES' });
+    const fx = fxReader(page);
 
-  // And hit-tested there. The operator panel pauses the stage, so the slow
-  // resize cannot run the drone's clock out before the click.
-  await fx.skip();
-  const target = await fx.next('drone-spawn');
-  await page.keyboard.press('Control+Shift+O');
-  await expect(page.locator('dialog.operator')).toBeVisible();
-  await page.setViewportSize({ width: 1440, height: 810 });
-  await page.locator('#close-operator').click();
-  await page.mouse.click(target.point!.x * 1440, target.point!.y * 810);
-  const hit = await fx.next('drone-hit', 1_500);
-  expect(hit.point).toEqual(target.point);
-  expect(problems).toEqual([]);
+    // Like a booth operator toggling fullscreen while a drone is up: a drone that
+    // was spawned at the old size must be drawn where it is now hit-tested.
+    // SwiftShader can be too slow to capture a drone before it leaves, so retry
+    // on fresh drones; a broken re-projection fails every attempt.
+    const sizes = [{ width: 800, height: 450 }, { width: 1000, height: 562 }];
+    let drawn = 0;
+    let stale = 0;
+    for (let attempt = 0; attempt < 3 && drawn <= 150; attempt++) {
+      if (attempt) await fx.skip();
+      const drone = attempt === 0 ? log.fx.find(event => event.type === 'drone-spawn') ?? await fx.next('drone-spawn')
+        : await fx.next('drone-spawn');
+      const [old, size] = attempt % 2 === 0 ? sizes : [sizes[1], sizes[0]];
+      await page.setViewportSize(size);
+      await page.waitForTimeout(150);
+      const x = drone.point!.x * size.width;
+      const y = drone.point!.y * size.height;
+      drawn = await cyanNear(page, x, y, 14);
+      // Where a mesh left at its old pixel position would now be drawn (y is bottom-up in world space).
+      const was = { x: drone.point!.x * old.width, y: size.height - (1 - drone.point!.y) * old.height };
+      stale = Math.hypot(was.x - x, was.y - y) > 60 ? await cyanNear(page, was.x, was.y, 14) : 0;
+    }
+    expect(drawn, 'the drone is drawn at its re-projected position').toBeGreaterThan(150);
+    expect(stale, 'nothing is drawn where the drone was before the resize').toBeLessThan(100);
+
+    // And hit-tested there. The operator panel pauses the stage, so the slow
+    // resize cannot run the drone's clock out before the click.
+    await fx.skip();
+    const target = await fx.next('drone-spawn');
+    await page.keyboard.press('Control+Shift+O');
+    await expect(page.locator('dialog.operator')).toBeVisible();
+    await page.setViewportSize({ width: 900, height: 506 });
+    await page.locator('#close-operator').click();
+    await page.mouse.click(target.point!.x * 900, target.point!.y * 506);
+    const hit = await fx.next('drone-hit', 1_500);
+    expect(hit.point).toEqual(target.point);
+    expect(problems).toEqual([]);
+  });
 });
 
 test('opening the operator panel freezes the stage clock', async ({ page }) => {
