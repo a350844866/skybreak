@@ -1,4 +1,4 @@
-# Junie task #1 — Comet fairness, Lightning pacing, first-click hitch, console cleanup
+# Junie task #1 — Comet fairness, Lightning pacing, first-click hitch, console cleanup, material pre-compile
 
 Branch: `junie/comet-pacing`, cut from the latest `main` once M4 has landed. Read `AGENTS.md` and `DESIGN.md` first; their rules apply. This task explicitly authorises the `DESIGN.md` edits listed in §E.
 
@@ -38,7 +38,22 @@ Separately, a Chrome trace shows that the first "Click to play" on a fresh page 
 ## D. Console cleanup
 
 - Add an inline favicon in `index.html`, for example `<link rel="icon" href="data:,">` or a small inline SVG. No network requests, per AGENTS.md. This removes the two `/favicon.ico` 404 errors on every load.
+- Then **delete the favicon allowlist** in `tests/e2e/support.ts` (`knownConsoleErrors = [/\/favicon\.ico$/]`), so e2e goes back to strictly requiring 0 console errors.
 - In `src/render/fx.ts`, `flat()` passes `blending: undefined` for non-additive materials, which logs `THREE.Material: parameter 'blending' has value of undefined.` 8 times per load. Pass `NormalBlending`, or omit the key.
+
+## F. Pre-compile every material before any stage (`src/render/gameView.ts`)
+
+The home-server M4 report (`playtest/2026-11-20-home-m4.md` §3.1) found that the first frame using each material stalls the main thread. Measurements:
+
+- SwiftShader at 1080p: 261 ms on the first lightning, 117 ms on the first comet.
+- SwiftShader at 720p: 91–135 ms on the first lightning, 25–52 ms on the first comet.
+- Later frames: under 1 ms.
+
+That frame can be the flash frame itself. The flash then appears late while the reaction clock is already running, so the first player after a page load gets a slower reaction time.
+
+- During load or ATTRACT, make every effect group visible for one call to `renderer.compile(scene, camera)`, or render one warm-up frame the player cannot see. Every program must be compiled before any stage starts.
+- The warm-up must leave no visible artefact and must not change any gameplay state.
+- Add an e2e assertion that each stage's first-frame `workMax` (from `frameSummary` in `tests/e2e/support.ts`) stays under 50 ms on a fresh page.
 
 ## E. Docs and tests
 
@@ -54,7 +69,7 @@ Separately, a Chrome trace shows that the first "Click to play" on a fresh page 
 
 ## Acceptance
 
-1. `npm test` passes; check the `Tests` line, not just the end of the output. `npm run build` passes.
+1. `npm test` passes; check the `Tests` line, not just the end of the output. `npm run build` passes. `npm run e2e` passes locally, and the CI run on the `junie/comet-pacing` push is green (CI uses `failOnFlakyTests`, so a pass that needed a retry still fails). The e2e interfaces listed in `playtest/2026-11-20-home-m4.md` §3.3 must keep working.
 2. Comet speed at 1920×1080, measured with any 300 seeds: p50 ≤ 360 px/s, p95 ≤ 800 px/s, max ≤ 1250 px/s. The reference simulation of this spec gives 328 / 746 / 1193.
 3. MBP real-GPU regression with `playtest/bot_mbp.py` (run by MBP Claude):
    - 0 frames over 1.5× the refresh period in any stage.
