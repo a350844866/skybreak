@@ -23,8 +23,11 @@ export interface Fx {
   lock?: number;
 }
 
-/** One animation frame: rAF timestamp, interval since the previous frame, JS time in rAF callbacks, phase. */
-export type Frame = [number, number, number, string];
+/**
+ * One animation frame: rAF timestamp, interval since the previous frame, JS time
+ * in rAF callbacks, phase, and the `#playfield` drawing-buffer width after the frame.
+ */
+export type Frame = [number, number, number, string, number];
 
 interface Tap {
   fx: Fx[];
@@ -75,9 +78,14 @@ function installTap() {
     const started = performance.now();
     callback(timestamp);
     const work = performance.now() - started;
+    const width = document.querySelector<HTMLCanvasElement>('#playfield')?.width ?? 0;
     const previous = tap.frames[tap.frames.length - 1];
-    if (previous && previous[0] === timestamp) previous[2] += work;
-    else tap.frames.push([timestamp, previous ? timestamp - previous[0] : 0, work, document.body?.dataset.phase ?? '']);
+    if (previous && previous[0] === timestamp) {
+      previous[2] += work;
+      previous[4] = width;
+    } else {
+      tap.frames.push([timestamp, previous ? timestamp - previous[0] : 0, work, document.body?.dataset.phase ?? '', width]);
+    }
   });
 }
 
@@ -247,6 +255,15 @@ export async function playRun(page: Page, style: Style,
 
 export const count = (log: RunLog, type: string) => log.fx.filter(event => event.type === type).length;
 
+/** Every change of the drawing-buffer width, with the phase of the frame that showed it first. */
+export function widthChanges(frames: readonly Frame[]): { phase: string; width: number }[] {
+  const changes: { phase: string; width: number }[] = [];
+  for (const frame of frames) {
+    if (changes[changes.length - 1]?.width !== frame[4]) changes.push({ phase: frame[3], width: frame[4] });
+  }
+  return changes;
+}
+
 /** Human-readable event list for assertion messages, relative to the first event shown. */
 export function timeline(log: RunLog, types: readonly string[]): string {
   const events = log.fx.filter(event => types.includes(event.type));
@@ -313,7 +330,8 @@ const drawnEffects = ['flash', 'drone-spawn', 'comet', 'comet-bonus'];
  * The frames where a fresh page first uses each material: the first frame of
  * each phase, and the frame that first draws each kind of effect (the first
  * flash comes well after the first Lightning frame). Mid-stage stalls with
- * other causes, such as the one-off adaptive pixel-ratio drop, are not here.
+ * other causes are not here (the adaptive pixel-ratio drop no longer is one:
+ * it waits for the stage to end).
  */
 export function firstUseFrames(log: RunLog): Frame[] {
   const picked = new Set<Frame>();

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
   count, firstUseFrames, frameSummary, idle, openGame, playRun, saveWithInitials, seeded, skilled, STAGES, timeline,
-  waitPhase, waitSaved, watchProblems,
+  waitPhase, waitSaved, watchProblems, widthChanges,
 } from './support';
 
 test.describe('a full run', () => {
@@ -82,7 +82,9 @@ test.describe('a full run', () => {
       // the JavaScript side (stage update + scene submission) and stalls.
       const frames = frameSummary(log.frames);
       const firstUse = frameSummary(firstUseFrames(log));
-      await testInfo.attach('frames.json', { body: JSON.stringify({ frames, firstUse }, null, 2), contentType: 'application/json' });
+      const widths = widthChanges(log.frames);
+      await testInfo.attach('frames.json', { body: JSON.stringify({ frames, firstUse, widths }, null, 2),
+        contentType: 'application/json' });
       for (const stage of STAGES) {
         // SwiftShader on CI manages only a few frames per second; "rendered at all" is the check.
         expect(frames[stage]?.frames ?? 0, `${stage} rendered`).toBeGreaterThan(10);
@@ -92,6 +94,12 @@ test.describe('a full run', () => {
         // frame of a stage and the first frame to draw an effect (e.g. the first
         // flash, whose reaction clock is already running) must not stall.
         expect(firstUse[stage]?.workMax, `${stage} first-use frame JS max (ms) on a fresh page`).toBeLessThan(50);
+        // And no other frame stalls either: the adaptive pixel-ratio drop (a
+        // 66-240 ms renderer.setSize on SwiftShader) waits for the stage to end.
+        expect(frames[stage].workMax, `${stage} JS max over every frame (ms)`).toBeLessThan(50);
+        // The window is never resized here, so the drawing buffer must not change mid-stage.
+        const stageWidths = new Set(log.frames.filter(frame => frame[3] === stage).map(frame => frame[4]));
+        expect([...stageWidths], `${stage} drawing-buffer widths (changes: ${JSON.stringify(widths)})`).toHaveLength(1);
       }
 
       await saveWithInitials(page, 'ZED');
