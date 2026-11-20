@@ -306,6 +306,31 @@ export function frameSummary(frames: readonly Frame[]): Record<string, StageFram
   }));
 }
 
+/** Effects emitted from a stage update, i.e. drawn in the frame whose callback emitted them. */
+const drawnEffects = ['flash', 'drone-spawn', 'comet', 'comet-bonus'];
+
+/**
+ * The frames where a fresh page first uses each material: the first frame of
+ * each phase, and the frame that first draws each kind of effect (the first
+ * flash comes well after the first Lightning frame). Mid-stage stalls with
+ * other causes, such as the one-off adaptive pixel-ratio drop, are not here.
+ */
+export function firstUseFrames(log: RunLog): Frame[] {
+  const picked = new Set<Frame>();
+  const seen = new Set<string>();
+  for (const frame of log.frames) {
+    if (!frame[1] || seen.has(frame[3])) continue;
+    seen.add(frame[3]);
+    picked.add(frame);
+  }
+  for (const type of drawnEffects) {
+    const first = log.fx.find(event => event.type === type);
+    const frame = first && [...log.frames].reverse().find(candidate => candidate[0] <= first.at);
+    if (frame) picked.add(frame);
+  }
+  return log.frames.filter(frame => picked.has(frame));
+}
+
 /** Seeded PRNG (mulberry32) so a failing bot run can be replayed. */
 export function seeded(seed: number): () => number {
   let state = seed >>> 0;

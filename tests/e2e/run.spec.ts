@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
-  count, frameSummary, idle, openGame, playRun, saveWithInitials, seeded, skilled, STAGES, timeline, waitPhase,
-  waitSaved, watchProblems,
+  count, firstUseFrames, frameSummary, idle, openGame, playRun, saveWithInitials, seeded, skilled, STAGES, timeline,
+  waitPhase, waitSaved, watchProblems,
 } from './support';
 
 test.describe('a full run', () => {
@@ -81,12 +81,17 @@ test.describe('a full run', () => {
       // Frame budget. SwiftShader cannot say anything about GPU time; this guards
       // the JavaScript side (stage update + scene submission) and stalls.
       const frames = frameSummary(log.frames);
-      await testInfo.attach('frames.json', { body: JSON.stringify(frames, null, 2), contentType: 'application/json' });
+      const firstUse = frameSummary(firstUseFrames(log));
+      await testInfo.attach('frames.json', { body: JSON.stringify({ frames, firstUse }, null, 2), contentType: 'application/json' });
       for (const stage of STAGES) {
         // SwiftShader on CI manages only a few frames per second; "rendered at all" is the check.
         expect(frames[stage]?.frames ?? 0, `${stage} rendered`).toBeGreaterThan(10);
         // Real GPU: ≤ 0.6 ms (playtest-mbp). The margin absorbs CI CPU contention.
         expect(frames[stage].workP95, `${stage} JS p95 (ms)`).toBeLessThan(8);
+        // A fresh page: every program was compiled during ATTRACT, so the first
+        // frame of a stage and the first frame to draw an effect (e.g. the first
+        // flash, whose reaction clock is already running) must not stall.
+        expect(firstUse[stage]?.workMax, `${stage} first-use frame JS max (ms) on a fresh page`).toBeLessThan(50);
       }
 
       await saveWithInitials(page, 'ZED');

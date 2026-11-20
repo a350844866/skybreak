@@ -137,7 +137,10 @@ function ribbon(color: string, opacity: number) {
   geometry.setIndex(new BufferAttribute(index, 1));
   geometry.setDrawRange(0, 0);
   const material = flat(color, opacity, true);
-  return { mesh: new Mesh(geometry, material), geometry, material };
+  const mesh = new Mesh(geometry, material);
+  // Every strike rewrites the vertices, so a cached bounding sphere would be stale.
+  mesh.frustumCulled = false;
+  return { mesh, geometry, material };
 }
 
 type Segment = [x1: number, y1: number, x2: number, y2: number, width: number];
@@ -209,6 +212,21 @@ export function bolt() {
       hold = 0.45;
     },
     release() { hold = 0; },
+    /**
+     * Lays one throwaway segment across the view so a warm-up render really
+     * draws both ribbons (an empty draw range would skip the draw call and
+     * leave the shaders cold). Returns the undo; the strike state is untouched.
+     */
+    prime(width: number, height: number) {
+      segments.length = 0;
+      segments.push([width / 2, 0, width / 2, height, 5]);
+      write(core, 1);
+      write(glow, 5);
+      segments.length = 0;
+      return () => {
+        for (const part of [core, glow]) part.geometry.setDrawRange(0, 0);
+      };
+    },
     update(dt: number) {
       intensity = Math.max(hold, intensity - dt * 3);
       core.material.opacity = intensity;

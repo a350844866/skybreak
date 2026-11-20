@@ -13,6 +13,7 @@ const hitBurst: Burst = { count: 26, color: '#7cf4ff', speed: [180, 520], life: 
 const hitCore: Burst = { count: 10, color: '#ffffff', speed: [60, 220], life: [0.2, 0.4], size: [8, 14] };
 const missPuff: Burst = { count: 6, color: '#8899b8', speed: [30, 90], life: [0.2, 0.35], size: [4, 7] };
 const bonusBurst: Burst = { count: 34, color: '#ffd36b', speed: [160, 460], life: [0.4, 0.8], size: [6, 12] };
+const warmSpark: Burst = { count: 1, color: '#ffffff', speed: [0, 0], life: [1, 1], size: [12, 12] };
 
 /**
  * The WebGL layer: sky, targets and effects. It never decides anything about
@@ -45,6 +46,7 @@ export function gameView(canvas: HTMLCanvasElement, labelRoot: HTMLElement) {
   let pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
   let slowFrames = 0;
   let sampledFrames = 0;
+  let warmedUp = false;
 
   const viewport = (): Viewport => ({ width: Math.max(1, canvas.clientWidth), height: Math.max(1, canvas.clientHeight) });
   const worldX = (p: Point) => p.x * width;
@@ -112,7 +114,40 @@ export function gameView(canvas: HTMLCanvasElement, labelRoot: HTMLElement) {
     }
   }
 
+  /**
+   * The first frame that draws a material compiles its program and blocks on
+   * the GPU (SwiftShader: up to ~260 ms at 1080p). Unwarmed, that frame can be
+   * the first flash, whose reaction clock is already running. So the very first
+   * ATTRACT frame draws every effect once, on screen and with real pixels (a
+   * skipped or empty draw leaves the shaders cold). The real frame is drawn
+   * over it before anything is presented, so the player never sees it. Only
+   * render-side state is touched, and all of it is restored.
+   */
+  function warmUp() {
+    warmedUp = true;
+    const groups = [strike.group, drone.group, comet.group];
+    const saved = groups.map(group => ({ visible: group.visible, position: group.position.clone(), scale: group.scale.clone() }));
+    for (const group of groups) group.visible = true;
+    for (const group of [drone.group, comet.group]) {
+      group.position.set(width / 2, height / 2, 0);
+      group.scale.set(40, 40, 1);
+    }
+    const unprime = strike.prime(width, height);
+    sparks.emit(width / 2, height / 2, warmSpark);
+    sparks.update(0.001);
+    renderer.compile(scene, camera);
+    renderer.render(scene, camera);
+    sparks.clear();
+    unprime();
+    groups.forEach((group, i) => {
+      group.visible = saved[i].visible;
+      group.position.copy(saved[i].position);
+      group.scale.copy(saved[i].scale);
+    });
+  }
+
   function render(now: number) {
+    if (!warmedUp) warmUp();
     const dt = last === undefined ? 0 : Math.min(0.1, Math.max(0, (now - last) / 1000));
     last = now;
     backdrop.update(now / 1000, dt);
