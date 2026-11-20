@@ -4,6 +4,8 @@ import type { Stage, StageSurface } from './stage';
 const trials = 5;
 /** Faster than any human reaction: treated as an anticipation guess (DESIGN.md §2). */
 export const ANTICIPATION_MS = 100;
+/** Random wait before each flash (DESIGN.md §2): long enough to stop rhythm guessing, short enough to keep pace. */
+export const FLASH_DELAY_MS = [900, 2200] as const;
 
 export function lightning(surface: StageSurface, random = Math.random): Stage {
   const listeners = new AbortController();
@@ -16,7 +18,7 @@ export function lightning(surface: StageSurface, random = Math.random): Stage {
 
   function arm(now: number) {
     armedAt = now;
-    dueAt = now + between(1200, 3000, random);
+    dueAt = now + between(FLASH_DELAY_MS[0], FLASH_DELAY_MS[1], random);
     flashAt = null;
   }
 
