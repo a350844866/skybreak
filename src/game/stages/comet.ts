@@ -143,9 +143,20 @@ export function comet(surface: StageSurface, initialPointer: Point | null, rando
         }
       }
 
+      // The grace ran out: the lock ended where the cursor left (`lockHeldMs` stopped growing there).
+      function endLock() {
+        locksMs.push(lockHeldMs);
+        locked = false;
+        outsideSince = null;
+      }
+
       function sample(at: number) {
         const inside = pointer !== null && distanceSquared(pointer, position, viewport) <= radius ** 2;
+        const graceOver = outsideSince !== null && at - outsideSince > LOCK_GRACE_MS;
         if (inside) {
+          // A pointer event can bring the cursor back between steps, before any
+          // outside sample noticed the grace ran out, so the return checks it too.
+          if (locked && graceOver) endLock();
           if (!locked) {
             locked = true;
             lockHeldMs = 0;
@@ -159,11 +170,8 @@ export function comet(surface: StageSurface, initialPointer: Point | null, rando
             insideSince = null;
             outsideSince = at;
             settleBonuses(at);
-          } else if (outsideSince !== null && at - outsideSince > LOCK_GRACE_MS) {
-            // The grace ran out: the lock ended where the cursor left.
-            locksMs.push(lockHeldMs);
-            locked = false;
-            outsideSince = null;
+          } else if (graceOver) {
+            endLock();
           }
         }
       }

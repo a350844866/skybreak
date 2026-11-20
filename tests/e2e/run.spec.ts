@@ -127,8 +127,8 @@ test('false starts and anticipation are penalised; genuine reactions are not', a
   await openGame(page);
   // The second flash is answered 10 ms after it appears, faster than any human:
   // it must count as anticipation, not as a 10 ms reaction. Not the first flash:
-  // on SwiftShader the first strike's material set-up can hold the main thread
-  // for over 100 ms, which would delay the synthetic click itself.
+  // that is the trial the two early clicks restart, and answering it genuinely
+  // checks that a real reaction right after false starts is not penalised.
   await page.evaluate(() => { window.__e2e.anticipate = { flash: 2, delayMs: 10 }; });
   const log = await playRun(page, {
     reactionMs: [150, 190], earlyClicks: 2, ignoreFlash: 2, drones: null, track: false,

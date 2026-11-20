@@ -262,16 +262,21 @@ it('gives the Comet path as a pure function of stage time', () => {
   expect([19_990, 15_000, 7777, 3210, 0].map(again).reverse()).toEqual(forward);
 });
 
-/** Follows the comet exactly at 1920x1080, except with the cursor gone during [away[0], away[1]). */
+/**
+ * Follows the comet exactly at 1920x1080, except with the cursor gone during [away[0], away[1]).
+ * Either edge may fall between 10 ms steps; it is then sent as its own pointer event inside the step.
+ */
 function followComet(away: [number, number], untilMs: number) {
   const { surface, fx } = playfield(1920, 1080);
   const stage = comet(surface, null, seeded(7));
   stage.start(0);
   stage.update(0, 0);
   const frames = new Map<number, { locked: boolean; lock: number; bonuses: number }>();
+  const pointerAt = (at: number) => at >= away[0] && at < away[1] ? null : cometFrames(fx).at(-1)!.point;
   for (let t = 10; t <= untilMs; t += 10) {
     const at = t - 10;
-    stage.syncPointer!(at, at >= away[0] && at < away[1] ? null : cometFrames(fx).at(-1)!.point);
+    stage.syncPointer!(at, pointerAt(at));
+    for (const edge of away) if (edge > at && edge < t) stage.syncPointer!(edge, pointerAt(edge));
     stage.update(10, t);
     const { locked, lock } = cometFrames(fx).at(-1)!;
     frames.set(t, { locked, lock, bonuses: fx.filter(event => event.type === 'comet-bonus').length });
@@ -299,6 +304,25 @@ it('ends a Comet lock at the exit time once the cursor is out for over 150 ms', 
   const stats = cometStats(stage);
   expect(stats).toEqual({ elapsedMs: 3500, locksMs: [2000, 1300] });
   expect(summarizeComet(stats)).toMatchObject({ onTargetMs: 3300, longestLockMs: 2000 });
+  stage.dispose();
+});
+
+it('ends a Comet lock when the cursor returns between steps after 151 ms outside', () => {
+  // Out at 2003 ms, back at 2154 ms: the return lands before the 2160 ms step could expire the grace.
+  const { stage, frames } = followComet([2003, 2154], 3500);
+  expect(frames.get(3500)!.bonuses).toBe(0);
+  const stats = cometStats(stage);
+  expect(stats).toEqual({ elapsedMs: 3500, locksMs: [2003, 3500 - 2154] });
+  expect(summarizeComet(stats)).toMatchObject({ onTargetMs: 3349, longestLockMs: 2003, altitude: 3.349 * 120 });
+  stage.dispose();
+});
+
+it('keeps a Comet lock when the cursor returns between steps after 149 ms outside', () => {
+  const { stage, frames } = followComet([2003, 2152], 3500);
+  expect(frames.get(3500)!.bonuses).toBe(1);
+  const stats = cometStats(stage);
+  expect(stats).toEqual({ elapsedMs: 3500, locksMs: [3500 - 149] });
+  expect(summarizeComet(stats)).toMatchObject({ onTargetMs: 3351, longestLockMs: 3351, altitude: 3.351 * 120 + 300 });
   stage.dispose();
 });
 
