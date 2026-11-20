@@ -80,7 +80,7 @@ That is the kind of finding a spec-only workflow would have missed.
 A separate Claude reviewer read only the code and the spec, not the orchestrator's conclusions. It found one real bug:
 
 - **The bug:** the 150 ms lock grace was checked only on the 10 ms simulation steps. A cursor that came back between steps could keep a lock after up to ~160 ms outside, and earn a +300 m bonus it shouldn't have.
-- **The fix:** Junie got a focused follow-up task. It wrote the off-step test first; the test failed on the old code. Then Junie fixed `sample()` (commit `d3b834e`).
+- **The fix:** Junie got a focused follow-up task. It wrote the off-step test first; the test failed on the old code. Then Junie fixed `sample()` (commit `7b65015`).
 - **After the fix:** 42 unit tests pass. CI treats a test that only passes on retry as a failure. It was green on both pushes of the branch, before and after the fix.
 
 ## 5. What we learned
@@ -93,7 +93,7 @@ A separate Claude reviewer read only the code and the spec, not the orchestrator
 ## Evidence in this repository
 
 - **`.idea/`:** the WebStorm project files.
-- **Junie's commits** (`git log --grep "Generated-by: Junie"`): `f00a766`, `d2d3e03`, `5bd20c0`, `bb79661`, `d3b834e`.
+- **Junie's commits** (`git log --grep "Generated-by: Junie"`): `5efdd5a`, `97b4d82`, `df7cbe5`, `6d69f07`, `7b65015`.
 - **[`playtest/`](playtest/):**
   - the real-GPU bot and its data
   - the playtest reports from both machines
