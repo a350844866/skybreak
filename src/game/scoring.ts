@@ -12,6 +12,7 @@ export interface DroneStats {
 
 export interface CometStats {
   readonly elapsedMs: number;
+  /** On-target time of each lock; a grace-period exit keeps the lock but adds nothing. */
   readonly locksMs: readonly number[];
 }
 

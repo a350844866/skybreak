@@ -40,7 +40,7 @@ dusk blue (stage 2) to starfield (stage 3). Total score is shown as
 **altitude in metres**: "Sky's the limit".
 
 ### Stage 1 — Lightning (reaction)
-- Screen is a dark storm cloud. After a random delay of 1.2–3.0 s a lightning
+- Screen is a dark storm cloud. After a random delay of 0.9–2.2 s a lightning
   flash lights the sky; the player clicks anywhere as fast as possible.
 - 5 trials. Clicking before the flash is a **false start**: the trial is
   re-rolled and costs a penalty (counted in the stats). A click less than
@@ -70,10 +70,22 @@ dusk blue (stage 2) to starfield (stage 3). Total score is shown as
 - 20 s.
 
 ### Stage 3 — Comet (tracking)
-- One comet flies a smooth but unpredictable path (sum of 3 sines with random
-  phase plus occasional direction flips every 1.5–3 s).
-- The player keeps the cursor inside the comet's halo. No clicking.
-- Measure: on-target % of frames (time-weighted), longest lock streak in s.
+- One comet flies a smooth but unpredictable path: a sum of 3 sines with
+  random phase. Path time advances at a rate that ramps linearly from 0.45× at
+  stage start to 0.75× at 20 s, so the comet starts slow and speeds up.
+- Every 3–5 s the path reverses. A reversal is eased: over 400 ms the direction
+  factor goes from ±1 to ∓1 on a cosine curve, so the comet slows, turns and
+  accelerates instead of snapping back. The path is a pure function of stage
+  time and the run's random seed.
+- The player keeps the cursor inside the comet's halo. No clicking. Halo
+  radius: `min(64 px, 10 % of the shorter screen side)`; the drawn halo and
+  the hit test use the same value.
+- Lock grace: a lock survives the cursor leaving the halo for up to 150 ms.
+  Time outside is never credited (not to on-target time, not to the 3 s
+  bonus). After more than 150 ms outside, the lock ends at the moment the
+  cursor left.
+- Measure: on-target % of frames (time-weighted), longest lock streak in s
+  (on-target time within one lock).
 - Score: `on_target_seconds * 120` metres, + a 300 m bonus for each full 3 s lock.
 - 20 s.
 

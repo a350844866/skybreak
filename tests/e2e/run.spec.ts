@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import {
-  count, frameSummary, idle, openGame, playRun, saveWithInitials, seeded, skilled, STAGES, timeline, waitPhase,
-  waitSaved, watchProblems,
+  count, firstUseFrames, frameSummary, idle, openGame, playRun, saveWithInitials, seeded, skilled, STAGES, timeline,
+  waitPhase, waitSaved, watchProblems,
 } from './support';
 
 test.describe('a full run', () => {
@@ -81,12 +81,17 @@ test.describe('a full run', () => {
       // Frame budget. SwiftShader cannot say anything about GPU time; this guards
       // the JavaScript side (stage update + scene submission) and stalls.
       const frames = frameSummary(log.frames);
-      await testInfo.attach('frames.json', { body: JSON.stringify(frames, null, 2), contentType: 'application/json' });
+      const firstUse = frameSummary(firstUseFrames(log));
+      await testInfo.attach('frames.json', { body: JSON.stringify({ frames, firstUse }, null, 2), contentType: 'application/json' });
       for (const stage of STAGES) {
         // SwiftShader on CI manages only a few frames per second; "rendered at all" is the check.
         expect(frames[stage]?.frames ?? 0, `${stage} rendered`).toBeGreaterThan(10);
         // Real GPU: ≤ 0.6 ms (playtest-mbp). The margin absorbs CI CPU contention.
         expect(frames[stage].workP95, `${stage} JS p95 (ms)`).toBeLessThan(8);
+        // A fresh page: every program was compiled during ATTRACT, so the first
+        // frame of a stage and the first frame to draw an effect (e.g. the first
+        // flash, whose reaction clock is already running) must not stall.
+        expect(firstUse[stage]?.workMax, `${stage} first-use frame JS max (ms) on a fresh page`).toBeLessThan(50);
       }
 
       await saveWithInitials(page, 'ZED');
@@ -122,8 +127,8 @@ test('false starts and anticipation are penalised; genuine reactions are not', a
   await openGame(page);
   // The second flash is answered 10 ms after it appears, faster than any human:
   // it must count as anticipation, not as a 10 ms reaction. Not the first flash:
-  // on SwiftShader the first strike's material set-up can hold the main thread
-  // for over 100 ms, which would delay the synthetic click itself.
+  // that is the trial the two early clicks restart, and answering it genuinely
+  // checks that a real reaction right after false starts is not penalised.
   await page.evaluate(() => { window.__e2e.anticipate = { flash: 2, delayMs: 10 }; });
   const log = await playRun(page, {
     reactionMs: [150, 190], earlyClicks: 2, ignoreFlash: 2, drones: null, track: false,
