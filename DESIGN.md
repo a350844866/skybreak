@@ -159,5 +159,21 @@ the "Enter initials" button (or the idle timeout). Clicks elsewhere do nothing.
    transitions, results card design, attract mode.
 4. Booth hardening: Playwright e2e + 300-run soak test, perf budget (p95 frame
    time < 12 ms at 1080p on integrated graphics), memory flat.
+   - `npm run e2e` (tests/e2e, also in CI): full run with initials reaching the
+     game and board screens, streak rule, false-start and anticipation rules,
+     reported reaction never shorter than the flash-timestamp-to-click delay and
+     no more than harness latency above it (presentation latency is not
+     visible to this check), comet locking, idle save, stray-click guard,
+     resize mid-stage, operator panel (PIN, pause, CSV, clear, PIN change),
+     offline. Runs on SwiftShader, so it guards the JavaScript side of the
+     frame budget (stage JS p95 < 8 ms with CI headroom) but says nothing
+     about GPU time.
+   - `npm run soak` (tests/soak): 300 runs back to back in one page, rotating
+     skilled / sloppy / no-input play, every tenth run saved by the idle timeout;
+     asserts heap slope < 15 KB/run, DOM nodes and listeners flat, no errors.
+   - GPU frame time is measured on real hardware with `playtest/bot_mbp.py`
+     (branch `playtest-mbp`; Apple M2 Pro, 2026-11-20: frame interval p95
+     9.2 ms at 120 Hz, stage JS p95 ≤ 0.6 ms, 0 dropped frames in stages).
+     Integrated graphics on Windows is still unmeasured.
 5. Submission: README, methodology, JetBrains tooling write-up, AI workflow
    case study, demo video, GitHub Pages deploy.

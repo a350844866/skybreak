@@ -8,14 +8,18 @@
   },
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 5200 --strictPort",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && tsc --noEmit -p tests && vite build",
     "preview": "vite preview --host 0.0.0.0 --port 5201 --strictPort",
-    "test": "vitest run"
+    "test": "vitest run",
+    "e2e": "playwright test --project=e2e",
+    "soak": "playwright test --project=soak"
   },
   "dependencies": {
     "three": "0.183.2"
   },
   "devDependencies": {
+    "@playwright/test": "1.60.0",
+    "@types/node": "22.20.5",
     "@types/three": "0.183.1",
     "fake-indexeddb": "^6.2.8",
     "typescript": "5.9.3",

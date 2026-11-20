@@ -19,4 +19,8 @@ function precache() {
   };
 }
 
-export default defineConfig({ plugins: [precache()] });
+export default defineConfig({
+  plugins: [precache()],
+  // Browser tests (tests/e2e, tests/soak) run under Playwright, not Vitest.
+  test: { include: ['tests/unit/**/*.test.ts'] },
+});
