@@ -168,6 +168,7 @@ export function mountGame() {
     const options = { signal: screen.signal };
     const { enteredAt, phase } = state;
     document.body.dataset.phase = phase;
+    view.setStageActive(phase === 'STAGE_LIGHTNING' || phase === 'STAGE_DRONES' || phase === 'STAGE_COMET');
     if (runId) channel.send({ type: 'stage', runId, phase });
     if (phase === 'ATTRACT') {
       view.theme('high');
