@@ -6,7 +6,7 @@ A fan walks up, plays one run, and walks away with a *skill card* that rates the
 Entry for the **Cloud9 × JetBrains "Sky's The Limit" Hackathon 2026, Category 3 (Event Mini Game)**.
 
 - **Play it:** https://a350844866.github.io/skybreak/ (the leaderboard screen is `?view=board`)
-- **Demo video:** _link added at submission_
+- **Demo video:** https://youtu.be/GekRpsC8CgY
 - **How it was built with WebStorm + Junie:** [AI_SHOWCASE.md](AI_SHOWCASE.md)
 
 ## The problem
