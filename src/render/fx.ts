@@ -1,6 +1,6 @@
 import {
   AdditiveBlending, BufferAttribute, BufferGeometry, CircleGeometry, Color, Group, Mesh,
-  MeshBasicMaterial, PlaneGeometry, Points, RingGeometry, ShaderMaterial,
+  MeshBasicMaterial, NormalBlending, PlaneGeometry, Points, RingGeometry, ShaderMaterial,
 } from 'three';
 
 // Everything here works in CSS pixels with y pointing up (three.js world space
@@ -28,7 +28,7 @@ function glowMaterial(color: string, alpha: number) {
 
 const flat = (color: string, opacity = 1, additive = false) => new MeshBasicMaterial({
   color, opacity, transparent: true, depthTest: false, depthWrite: false,
-  blending: additive ? AdditiveBlending : undefined,
+  blending: additive ? AdditiveBlending : NormalBlending,
 });
 
 /* ---------------------------------------------------------------- particles */

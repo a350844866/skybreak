@@ -81,12 +81,6 @@ function installTap() {
   });
 }
 
-/**
- * Console errors that are known and tracked elsewhere. Junie task #1 §D adds an
- * inline favicon; delete this entry when it lands so the suite is strict again.
- */
-const knownConsoleErrors = [/\/favicon\.ico$/];
-
 /** Collects page errors and console errors; tests assert the list stays empty. */
 export function watchProblems(page: Page): string[] {
   const problems: string[] = [];
@@ -94,7 +88,6 @@ export function watchProblems(page: Page): string[] {
   page.on('console', message => {
     if (message.type() !== 'error') return;
     const { url } = message.location();
-    if (knownConsoleErrors.some(pattern => pattern.test(url))) return;
     problems.push(`console error: ${message.text()} (${url})`);
   });
   return problems;
