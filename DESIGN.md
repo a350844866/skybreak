@@ -138,6 +138,9 @@ the "Enter initials" button (or the idle timeout). Clicks elsewhere do nothing.
   against target meshes (or screen-space distance for small targets).
 - Timing: a fixed-step simulation clock (`performance.now()` based), rendering
   decoupled. Reaction time measured against the actual presented frame.
+  The adaptive resolution (a booth safeguard that lowers the pixel ratio when
+  the GPU cannot hold the frame rate) measures in every phase, but only
+  applies changes outside timed stages.
 - Audio: WebAudio synthesized SFX (thunder, zap, lock-on hum), master volume
   in the operator panel. Audio starts on the first click (browser policy).
 - Tests: Vitest for pure logic (scoring, rating, state machine, leaderboard

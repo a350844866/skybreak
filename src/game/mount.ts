@@ -4,7 +4,7 @@ import { drones } from './stages/drones';
 import { lightning } from './stages/lightning';
 import { pointerPoint } from './stages/stage';
 import type { Point, Stage, StageFx, StageSurface } from './stages/stage';
-import { COUNTDOWN_MS, resetRun, transition } from './stateMachine';
+import { COUNTDOWN_MS, isStagePhase, resetRun, transition } from './stateMachine';
 import type { RunEvent } from './stateMachine';
 import { gameView } from '../render/gameView';
 import { synth } from '../audio/synth';
@@ -168,6 +168,7 @@ export function mountGame() {
     const options = { signal: screen.signal };
     const { enteredAt, phase } = state;
     document.body.dataset.phase = phase;
+    view.setStageActive(isStagePhase(phase));
     if (runId) channel.send({ type: 'stage', runId, phase });
     if (phase === 'ATTRACT') {
       view.theme('high');

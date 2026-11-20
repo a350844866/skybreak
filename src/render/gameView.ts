@@ -4,6 +4,7 @@ import type { Point, StageFx, Theme, Viewport } from '../game/stages/stage';
 import { bolt, cometMesh, droneMesh, particles } from './fx';
 import type { Burst } from './fx';
 import { labels } from './labels';
+import { qualityGovernor } from './quality';
 import { sky } from './sky';
 
 const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -43,9 +44,7 @@ export function gameView(canvas: HTMLCanvasElement, labelRoot: HTMLElement) {
   // The drone is kept in normalised coordinates and re-projected every frame, so
   // a resize or fullscreen toggle mid-stage can never move it off its hit area.
   let dronePoint: Point | null = null;
-  let pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
-  let slowFrames = 0;
-  let sampledFrames = 0;
+  const quality = qualityGovernor(Math.min(window.devicePixelRatio || 1, 1.5));
   let warmedUp = false;
 
   const viewport = (): Viewport => ({ width: Math.max(1, canvas.clientWidth), height: Math.max(1, canvas.clientHeight) });
@@ -148,6 +147,9 @@ export function gameView(canvas: HTMLCanvasElement, labelRoot: HTMLElement) {
 
   function render(now: number) {
     if (!warmedUp) warmUp();
+    // A drop deferred by a stage that has ended is applied here, on the frame after
+    // the phase change, never inside it (and never once the next stage has started).
+    applyQuality(quality.takeDue());
     const dt = last === undefined ? 0 : Math.min(0.1, Math.max(0, (now - last) / 1000));
     last = now;
     backdrop.update(now / 1000, dt);
@@ -171,26 +173,18 @@ export function gameView(canvas: HTMLCanvasElement, labelRoot: HTMLElement) {
       sparks.points.position.set(0, 0, 0);
     }
     renderer.render(scene, camera);
-    adaptQuality(dt);
+    applyQuality(quality.sample(dt));
   }
 
-  // Booth safeguard: if a weak GPU cannot hold the frame rate, render fewer pixels
-  // rather than drop frames (a late frame would delay the flash a player reacts to).
-  function adaptQuality(dt: number) {
-    if (!dt) return;
-    sampledFrames++;
-    if (dt > 1 / 45) slowFrames++;
-    if (sampledFrames < 180) return;
-    if (slowFrames > 30 && pixelRatio > 0.75) {
-      pixelRatio = Math.max(0.75, pixelRatio - 0.25);
-      resize();
-    }
-    sampledFrames = slowFrames = 0;
+  // A pixel-ratio change costs a full resize; the governor only asks for one outside timed stages.
+  function applyQuality(ratio: number | null) {
+    if (ratio !== null) resize();
   }
 
+  /** Real window resizes apply at once: hit-testing depends on the real canvas size. */
   function resize() {
     ({ width, height } = viewport());
-    const ratio = Math.min(window.devicePixelRatio || 1, 1.5, pixelRatio);
+    const ratio = Math.min(window.devicePixelRatio || 1, 1.5, quality.ratio);
     renderer.setPixelRatio(ratio);
     renderer.setSize(width, height, false);
     camera.right = width;
@@ -209,6 +203,8 @@ export function gameView(canvas: HTMLCanvasElement, labelRoot: HTMLElement) {
     /** Visual-only events (attract demo) use the same pipeline as real play. */
     render,
     resize,
+    /** Timed stages defer any resolution drop; after they end, the next render applies it. */
+    setStageActive: (active: boolean) => quality.setStageActive(active),
     clearEffects() { sparks.clear(); text.clear(); fx({ type: 'clear' }); },
     dispose() {
       for (const part of [backdrop, sparks, strike, drone, comet, text]) part.dispose();

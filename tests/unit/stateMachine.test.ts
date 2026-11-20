@@ -1,6 +1,6 @@
 import { expect, it } from 'vitest';
-import { COUNTDOWN_MS, IDLE_MS, resetRun, transition } from '../../src/game/stateMachine';
-import type { RunState, StageResult } from '../../src/game/stateMachine';
+import { COUNTDOWN_MS, IDLE_MS, isStagePhase, resetRun, transition } from '../../src/game/stateMachine';
+import type { Phase, RunState, StageResult } from '../../src/game/stateMachine';
 
 const lightning: StageResult = { phase: 'STAGE_LIGHTNING', stats: { reactionsMs: [203], falseStarts: 1 } };
 const drones: StageResult = { phase: 'STAGE_DRONES', stats: { outcomes: [{ kind: 'hit', ttkMs: 415 }] } };
@@ -13,6 +13,11 @@ function results() {
   const first = tick(start(resetRun(0), 1), 3001);
   return complete(complete(complete(first, lightning, 18_001), drones, 38_001), comet, 58_001);
 }
+
+it('treats exactly the three timed stages as stage phases', () => {
+  const phases: Phase[] = ['ATTRACT', 'COUNTDOWN', 'STAGE_LIGHTNING', 'STAGE_DRONES', 'STAGE_COMET', 'RESULTS', 'INITIALS'];
+  expect(phases.filter(isStagePhase)).toEqual(['STAGE_LIGHTNING', 'STAGE_DRONES', 'STAGE_COMET']);
+});
 
 it('follows the stage order and keeps completed raw stats', () => {
   const countdown = start(resetRun(0), 100);
