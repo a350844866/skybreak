@@ -147,6 +147,9 @@ export function gameView(canvas: HTMLCanvasElement, labelRoot: HTMLElement) {
 
   function render(now: number) {
     if (!warmedUp) warmUp();
+    // A drop deferred by a stage that has ended is applied here, on the frame after
+    // the phase change, never inside it (and never once the next stage has started).
+    applyQuality(quality.takeDue());
     const dt = last === undefined ? 0 : Math.min(0.1, Math.max(0, (now - last) / 1000));
     last = now;
     backdrop.update(now / 1000, dt);
@@ -200,8 +203,8 @@ export function gameView(canvas: HTMLCanvasElement, labelRoot: HTMLElement) {
     /** Visual-only events (attract demo) use the same pipeline as real play. */
     render,
     resize,
-    /** Timed stages defer any resolution drop; leaving them applies it. */
-    setStageActive: (active: boolean) => applyQuality(quality.setStageActive(active)),
+    /** Timed stages defer any resolution drop; after they end, the next render applies it. */
+    setStageActive: (active: boolean) => quality.setStageActive(active),
     clearEffects() { sparks.clear(); text.clear(); fx({ type: 'clear' }); },
     dispose() {
       for (const part of [backdrop, sparks, strike, drone, comet, text]) part.dispose();

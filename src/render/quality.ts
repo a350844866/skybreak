@@ -7,7 +7,9 @@
  * SwiftShader), so it never happens during a timed stage: a stall there would
  * show a flash or a drone late while its clock is already running. Frames are
  * still measured in every phase; a drop decided during a stage waits for the
- * next non-stage phase.
+ * next non-stage phase, and is then picked up by the renderer's next frame
+ * (`takeDue`) rather than inside the phase change, which is busy building the
+ * next screen.
  */
 
 export const QUALITY_WINDOW_FRAMES = 180;
@@ -20,8 +22,14 @@ export const QUALITY_FLOOR = 0.75;
 export interface QualityGovernor {
   /** Records one frame of `dt` seconds. Returns the pixel ratio to apply now, or null. */
   sample(dt: number): number | null;
-  /** Returns the pixel ratio to apply now (a drop deferred by the stage that just ended), or null. */
-  setStageActive(active: boolean): number | null;
+  /** Marks whether a timed stage is running. Never applies anything itself: see `takeDue`. */
+  setStageActive(active: boolean): void;
+  /**
+   * Returns a deferred drop to apply now, or null. Always null while a stage is
+   * active, so a frame that runs after the next stage has already started keeps
+   * the drop waiting.
+   */
+  takeDue(): number | null;
   /** The ratio the renderer should be using. */
   readonly ratio: number;
   /** True while a decided drop waits for the stage to end. */
@@ -55,8 +63,8 @@ export function qualityGovernor(initialRatio: number): QualityGovernor {
     },
     setStageActive(active) {
       stageActive = active;
-      return flush();
     },
+    takeDue: flush,
     get ratio() { return applied; },
     get pending() { return target !== applied; },
   };

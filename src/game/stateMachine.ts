@@ -6,6 +6,11 @@ export const IDLE_MS = 25_000;
 export type StagePhase = 'STAGE_LIGHTNING' | 'STAGE_DRONES' | 'STAGE_COMET';
 export type Phase = 'ATTRACT' | 'COUNTDOWN' | StagePhase | 'RESULTS' | 'INITIALS';
 
+/** True for the three timed stages, whose clocks run while they are on screen. */
+export function isStagePhase(phase: Phase): phase is StagePhase {
+  return phase === 'STAGE_LIGHTNING' || phase === 'STAGE_DRONES' || phase === 'STAGE_COMET';
+}
+
 export interface RunState {
   readonly phase: Phase;
   readonly enteredAt: number;

@@ -49,7 +49,8 @@ describe('adaptive resolution', () => {
     expect(feedWindow(quality, QUALITY_WINDOW_FRAMES), 'never below the floor').toEqual([]);
     expect(quality.ratio).toBe(0.75);
     expect(quality.pending).toBe(false);
-    expect(quality.setStageActive(false)).toBeNull();
+    quality.setStageActive(false);
+    expect(quality.takeDue()).toBeNull();
   });
 
   it('never drops a ratio that starts at or below the floor', () => {
@@ -60,18 +61,36 @@ describe('adaptive resolution', () => {
 
   it('defers a drop decided during a stage until the stage becomes inactive', () => {
     const quality = qualityGovernor(1.5);
-    expect(quality.setStageActive(true)).toBeNull();
+    quality.setStageActive(true);
     expect(feedWindow(quality, 31), 'nothing is applied mid-stage').toEqual([]);
+    expect(quality.takeDue(), 'nothing is due mid-stage').toBeNull();
     expect(quality.ratio).toBe(1.5);
     expect(quality.pending).toBe(true);
     // Moving from one stage to the next is still a stage.
-    expect(quality.setStageActive(true)).toBeNull();
+    quality.setStageActive(true);
+    expect(quality.takeDue()).toBeNull();
     expect(quality.ratio).toBe(1.5);
 
-    expect(quality.setStageActive(false), 'applied when the stage ends').toBe(1.25);
+    expect(quality.setStageActive(false), 'ending the stage only marks the drop as due').toBeUndefined();
+    expect(quality.ratio).toBe(1.5);
+    expect(quality.pending).toBe(true);
+    expect(quality.takeDue(), 'the next frame applies it').toBe(1.25);
     expect(quality.ratio).toBe(1.25);
     expect(quality.pending).toBe(false);
-    expect(quality.setStageActive(false), 'applied once').toBeNull();
+    expect(quality.takeDue(), 'applied once').toBeNull();
+  });
+
+  it('keeps a due drop waiting if the next stage starts before the next frame', () => {
+    const quality = qualityGovernor(1.5);
+    quality.setStageActive(true);
+    feedWindow(quality, 31);
+    quality.setStageActive(false);
+    quality.setStageActive(true);
+    expect(quality.takeDue(), 'never applied while a stage is active').toBeNull();
+    expect(quality.ratio).toBe(1.5);
+    expect(quality.pending).toBe(true);
+    quality.setStageActive(false);
+    expect(quality.takeDue()).toBe(1.25);
   });
 
   it('keeps measuring during a stage: a slow stage window still counts', () => {
@@ -81,7 +100,8 @@ describe('adaptive resolution', () => {
     quality.setStageActive(true);
     for (let i = 0; i < QUALITY_WINDOW_FRAMES / 2; i++) expect(quality.sample(fast)).toBeNull();
     expect(quality.pending).toBe(true);
-    expect(quality.setStageActive(false)).toBe(1.25);
+    quality.setStageActive(false);
+    expect(quality.takeDue()).toBe(1.25);
   });
 
   it('collapses repeated slow windows in one stage into at most one step per window, never below 0.75', () => {
@@ -90,11 +110,13 @@ describe('adaptive resolution', () => {
     expect(feedWindow(quality, 31)).toEqual([]);
     expect(feedWindow(quality, 31)).toEqual([]);
     expect(quality.ratio).toBe(1.5);
-    expect(quality.setStageActive(false), 'two windows, two steps, one change').toBe(1);
+    quality.setStageActive(false);
+    expect(quality.takeDue(), 'two windows, two steps, one change').toBe(1);
 
     quality.setStageActive(true);
     for (let window = 0; window < 6; window++) expect(feedWindow(quality, QUALITY_WINDOW_FRAMES)).toEqual([]);
-    expect(quality.setStageActive(false), 'six windows stop at the floor').toBe(0.75);
+    quality.setStageActive(false);
+    expect(quality.takeDue(), 'six windows stop at the floor').toBe(0.75);
     expect(quality.ratio).toBe(0.75);
   });
 
@@ -102,7 +124,8 @@ describe('adaptive resolution', () => {
     const quality = qualityGovernor(1.5);
     quality.setStageActive(true);
     expect(feedWindow(quality, 30)).toEqual([]);
-    expect(quality.setStageActive(false)).toBeNull();
+    quality.setStageActive(false);
+    expect(quality.takeDue()).toBeNull();
     expect(quality.ratio).toBe(1.5);
   });
 });
