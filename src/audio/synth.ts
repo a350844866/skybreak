@@ -2,33 +2,49 @@ import type { StageFx } from '../game/stages/stage';
 
 /**
  * All sound is synthesised at runtime with WebAudio: no files, no licences.
- * The context is created on the first user gesture (browser autoplay policy);
- * until then every call is a silent no-op.
+ * The context is created ahead of time by prepare() (it starts suspended under
+ * the browser autoplay policy) and the first user gesture only resumes it;
+ * until that gesture every call is a silent no-op.
  */
 export function synth() {
   let ctx: AudioContext | undefined;
   let master: GainNode | undefined;
   let noise: AudioBuffer | undefined;
   let enabled = true;
+  let unlocked = false;
   let hum: { osc: OscillatorNode; gain: GainNode } | undefined;
 
-  function unlock() {
-    if (!ctx) {
+  /**
+   * Creating an AudioContext queries the output device synchronously (~200 ms
+   * in Chrome). Doing it at load, while nobody is playing, keeps that stall out
+   * of the first "Click to play".
+   */
+  function prepare() {
+    if (ctx) return;
+    try {
       ctx = new AudioContext();
-      master = ctx.createGain();
-      master.gain.value = enabled ? 0.55 : 0;
-      master.connect(ctx.destination);
-      noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
-      const data = noise.getChannelData(0);
-      for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    } catch {
+      return; // No audio device: the game stays silent; unlock() tries again.
     }
-    if (ctx.state === 'suspended') void ctx.resume();
+    master = ctx.createGain();
+    master.gain.value = enabled ? 0.55 : 0;
+    master.connect(ctx.destination);
+    noise = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+    const data = noise.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
   }
 
-  // 'suspended' right after creation still schedules (it plays once resume() lands),
-  // so the first countdown beep after page load is not lost.
+  function unlock() {
+    // Only a fallback: normally prepare() already ran at mount.
+    if (!ctx) prepare();
+    unlocked = true;
+    if (!paused && ctx?.state === 'suspended') void ctx.resume();
+  }
+
+  // 'suspended' right after the unlock still schedules (it plays once resume()
+  // lands), so the first countdown beep after page load is not lost.
   let paused = false;
-  const live = () => (ctx && master && enabled && !paused && ctx.state !== 'closed' ? ctx : undefined);
+  const live = () => (ctx && master && unlocked && enabled && !paused && ctx.state !== 'closed' ? ctx : undefined);
 
   function envelope(gain: GainNode, at: number, peak: number, attack: number, decay: number) {
     gain.gain.setValueAtTime(0.0001, at);
@@ -93,6 +109,7 @@ export function synth() {
   }
 
   return {
+    prepare,
     unlock,
     setEnabled(value: boolean) {
       enabled = value;
@@ -132,7 +149,8 @@ export function synth() {
     },
     resume() {
       paused = false;
-      if (ctx?.state === 'suspended') void ctx.resume();
+      // Before the first gesture a resume() would only be refused by the autoplay policy.
+      if (unlocked && ctx?.state === 'suspended') void ctx.resume();
     },
     countdown(seconds: number) { tone(seconds > 0 ? 660 : 990, 0.12, 'square', 0.08); },
     go() { tone(990, 0.2, 'square', 0.1); },

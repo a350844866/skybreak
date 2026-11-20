@@ -32,6 +32,8 @@ export function mountGame() {
   }
 
   const audio = synth();
+  // Pay the AudioContext's device query now, not inside the first "Click to play".
+  audio.prepare();
   const subscribers: ((event: StageFx) => void)[] = [
     event => view.fx(event), event => audio.fx(event), event => ui.fx(event),
   ];
@@ -302,7 +304,7 @@ export function mountGame() {
     if (document.hidden) audio.suspend();
     else if (pausedAt === null) audio.resume();
   }, appOptions);
-  // Browsers only allow audio after a gesture; the first click or key unlocks it.
+  // Browsers only allow audio after a gesture; the first click or key resumes the prepared context.
   for (const type of ['pointerdown', 'keydown']) {
     window.addEventListener(type, () => audio.unlock(), { ...appOptions, capture: true });
   }
