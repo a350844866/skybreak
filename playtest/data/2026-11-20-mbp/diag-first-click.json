@@ -1,0 +1,127 @@
+{
+ "t_click": 2657.600000023842,
+ "window": {
+  "x": 0,
+  "y": 33
+ },
+ "long": [
+  [
+   249,
+   241.6,
+   0,
+   "COUNTDOWN"
+  ]
+ ],
+ "console": [
+  {
+   "type": "warning",
+   "text": "THREE.Material: parameter 'blending' has value of undefined.",
+   "loc": {
+    "url": "http://localhost:5201/assets/mount-Cp6LASCI.js",
+    "line": 0,
+    "column": 7941,
+    "lineNumber": 0,
+    "columnNumber": 7941
+   }
+  },
+  {
+   "type": "warning",
+   "text": "THREE.Material: parameter 'blending' has value of undefined.",
+   "loc": {
+    "url": "http://localhost:5201/assets/mount-Cp6LASCI.js",
+    "line": 0,
+    "column": 7941,
+    "lineNumber": 0,
+    "columnNumber": 7941
+   }
+  },
+  {
+   "type": "warning",
+   "text": "THREE.Material: parameter 'blending' has value of undefined.",
+   "loc": {
+    "url": "http://localhost:5201/assets/mount-Cp6LASCI.js",
+    "line": 0,
+    "column": 7941,
+    "lineNumber": 0,
+    "columnNumber": 7941
+   }
+  },
+  {
+   "type": "warning",
+   "text": "THREE.Material: parameter 'blending' has value of undefined.",
+   "loc": {
+    "url": "http://localhost:5201/assets/mount-Cp6LASCI.js",
+    "line": 0,
+    "column": 7941,
+    "lineNumber": 0,
+    "columnNumber": 7941
+   }
+  },
+  {
+   "type": "warning",
+   "text": "THREE.Material: parameter 'blending' has value of undefined.",
+   "loc": {
+    "url": "http://localhost:5201/assets/mount-Cp6LASCI.js",
+    "line": 0,
+    "column": 7941,
+    "lineNumber": 0,
+    "columnNumber": 7941
+   }
+  },
+  {
+   "type": "warning",
+   "text": "THREE.Material: parameter 'blending' has value of undefined.",
+   "loc": {
+    "url": "http://localhost:5201/assets/mount-Cp6LASCI.js",
+    "line": 0,
+    "column": 7941,
+    "lineNumber": 0,
+    "columnNumber": 7941
+   }
+  },
+  {
+   "type": "warning",
+   "text": "THREE.Material: parameter 'blending' has value of undefined.",
+   "loc": {
+    "url": "http://localhost:5201/assets/mount-Cp6LASCI.js",
+    "line": 0,
+    "column": 7941,
+    "lineNumber": 0,
+    "columnNumber": 7941
+   }
+  },
+  {
+   "type": "warning",
+   "text": "THREE.Material: parameter 'blending' has value of undefined.",
+   "loc": {
+    "url": "http://localhost:5201/assets/mount-Cp6LASCI.js",
+    "line": 0,
+    "column": 7941,
+    "lineNumber": 0,
+    "columnNumber": 7941
+   }
+  },
+  {
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "loc": {
+    "url": "http://localhost:5201/favicon.ico",
+    "line": 0,
+    "column": 0,
+    "lineNumber": 0,
+    "columnNumber": 0
+   }
+  },
+  {
+   "type": "error",
+   "text": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+   "loc": {
+    "url": "http://localhost:5201/favicon.ico",
+    "line": 0,
+    "column": 0,
+    "lineNumber": 0,
+    "columnNumber": 0
+   }
+  }
+ ]
+}

@@ -1,0 +1,33 @@
+11-20 10:08:37 [1080p] Chrome 157.0.8103.79 DPR=1 GPU=ANGLE (Apple, ANGLE Metal Renderer: Apple M2 Pro, Unspecified Version)
+11-20 10:09:58 [1080p] run 1/3: 72,380m | Reaction 253 ms=77, Flick 256 ms=95, Precision 100%=100, Tracking 99%=99 | comet lockedFrames 98.8% bonus 6 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:11:20 [1080p] run 2/3: 72,350m | Reaction 256 ms=76, Flick 256 ms=95, Precision 100%=100, Tracking 99%=99 | comet lockedFrames 99.0% bonus 6 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:12:42 [1080p] run 3/3: 71,870m | Reaction 251 ms=78, Flick 255 ms=95, Precision 100%=100, Tracking 99%=99 | comet lockedFrames 99.2% bonus 4 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:12:42 [1080p] done: refresh 8.30 ms, render ratio min 1, errors 2
+11-20 10:12:45 [retina] Chrome 157.0.8103.79 DPR=2 GPU=ANGLE (Apple, ANGLE Metal Renderer: Apple M2 Pro, Unspecified Version)
+11-20 10:14:07 [retina] run 1/1: 58,669m | Reaction 254 ms=77, Flick 306 ms=91, Precision 100%=100, Tracking 99%=99 | comet lockedFrames 98.7% bonus 6 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:14:08 [retina] done: refresh 16.70 ms, render ratio min 1.5, errors 2
+11-20 10:14:11 [soak] Chrome 157.0.8103.79 DPR=1 GPU=ANGLE (Apple, ANGLE Metal Renderer: Apple M2 Pro, Unspecified Version)
+11-20 10:15:32 [soak] run 1/10: 58,171m | Reaction 243 ms=79, Flick 306 ms=91, Precision 100%=100, Tracking 99%=99 | comet lockedFrames 98.7% bonus 4 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:15:32 [soak]   heap 7.88 MB raw / 5.74 MB after GC, nodes 153, listeners 66
+11-20 10:16:53 [soak] run 2/10: 58,508m | Reaction 275 ms=72, Flick 304 ms=91, Precision 100%=100, Tracking 99%=99 | comet lockedFrames 98.6% bonus 6 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:16:53 [soak]   heap 5.99 MB raw / 5.97 MB after GC, nodes 160, listeners 66
+11-20 10:18:14 [soak] run 3/10: 58,673m | Reaction 258 ms=76, Flick 304 ms=91, Precision 100%=100, Tracking 99%=99 | comet lockedFrames 98.9% bonus 6 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:18:14 [soak]   heap 5.85 MB raw / 5.84 MB after GC, nodes 167, listeners 66
+11-20 10:19:35 [soak] run 4/10: 58,020m | Reaction 263 ms=75, Flick 304 ms=91, Precision 100%=100, Tracking 99%=99 | comet lockedFrames 98.8% bonus 4 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:19:35 [soak]   heap 6.04 MB raw / 6.02 MB after GC, nodes 167, listeners 67
+11-20 10:20:58 [soak] run 5/10: 58,351m | Reaction 258 ms=76, Flick 305 ms=91, Precision 100%=100, Tracking 99%=99 | comet lockedFrames 98.8% bonus 5 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:20:59 [soak]   heap 5.99 MB raw / 5.97 MB after GC, nodes 167, listeners 66
+11-20 10:22:18 [soak] run 6/10: 58,441m | Reaction 245 ms=79, Flick 306 ms=91, Precision 100%=100, Tracking 99%=99 | comet lockedFrames 98.7% bonus 5 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:22:19 [soak]   heap 8.19 MB raw / 5.92 MB after GC, nodes 167, listeners 66
+11-20 10:23:39 [soak] run 7/10: 58,494m | Reaction 239 ms=80, Flick 307 ms=91, Precision 100%=100, Tracking 99%=99 | comet lockedFrames 98.6% bonus 5 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:23:39 [soak]   heap 8.42 MB raw / 6.09 MB after GC, nodes 167, listeners 66
+11-20 10:25:02 [soak] run 8/10: 58,500m | Reaction 268 ms=74, Flick 306 ms=91, Precision 100%=100, Tracking 99%=99 | comet lockedFrames 98.6% bonus 6 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:25:02 [soak]   heap 6.04 MB raw / 6.03 MB after GC, nodes 167, listeners 67
+11-20 10:26:24 [soak] run 9/10: 57,687m | Reaction 258 ms=76, Flick 307 ms=91, Precision 100%=100, Tracking 98%=98 | comet lockedFrames 98.6% bonus 3 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:26:24 [soak]   heap 8.50 MB raw / 6.02 MB after GC, nodes 167, listeners 67
+11-20 10:27:45 [soak] run 10/10: 57,992m | Reaction 259 ms=76, Flick 306 ms=91, Precision 100%=100, Tracking 98%=98 | comet lockedFrames 98.6% bonus 4 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:27:45 [soak]   heap 8.80 MB raw / 6.17 MB after GC, nodes 167, listeners 66
+11-20 10:27:46 [soak] done: refresh 16.70 ms, render ratio min 1, errors 2
+11-20 10:29:41 [retina] Chrome 157.0.8103.79 DPR=2 GPU=ANGLE (Apple, ANGLE Metal Renderer: Apple M2 Pro, Unspecified Version)
+11-20 10:31:02 [retina] run 1/1: 71,972m | Reaction 260 ms=75, Flick 257 ms=95, Precision 100%=100, Tracking 99%=99 | comet lockedFrames 98.6% bonus 5 | RESULTS->ATTRACT 25.0s | external input 0 | errors so far 2
+11-20 10:31:02 [retina] done: refresh 8.30 ms, render ratio min 1.5, errors 2
