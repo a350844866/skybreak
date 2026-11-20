@@ -9,7 +9,7 @@ Skybreak was built by AI coding agents working from a written spec. Three things
 | Spec owner | a human | Chose the category and the concept; playtested the game; gave the final yes/no on anything public |
 | Builder, milestones 1–4 | Claude Code (Anthropic), on a home server | Wrote the game and test infrastructure from [`DESIGN.md`](DESIGN.md) and [`AGENTS.md`](AGENTS.md) |
 | Tester and orchestrator | a second Claude Code session, on a MacBook Pro | Measured on a real GPU, collected human playtest feedback, wrote the task specs for Junie, reviewed Junie's work |
-| Implementer, gameplay iteration | **Junie** (JetBrains AI coding agent, CLI 26.11.2, signed in with JetBrains AI Ultimate), in the project as opened in **WebStorm** | Implemented the changes that came out of the first playtest |
+| Implementer, iterations after the first playtest | **Junie** (JetBrains AI coding agent, CLI 26.11.2, signed in with JetBrains AI Ultimate), in the project as opened in **WebStorm** | Implemented the changes that came out of the first playtest, then the render-stall fix it had found itself |
 
 `AGENTS.md` was written for coding agents ("guidelines for coding agents (Junie)") from day one. It holds the rules every agent followed: pure logic kept separate and unit-tested, every listener and timer disposed per run, no network at runtime, and no `Date.now()` for gameplay timing.
 
@@ -71,7 +71,7 @@ Junie ran from the command line in the project's WebStorm workspace on a dedicat
 Junie also reported where it deviated from the spec, and why:
 
 - A whole-stage "no frame over 50 ms" check could not pass. The cause was a different stall: the existing adaptive-resolution fallback resizes the canvas in the middle of a stage.
-- So Junie scoped its new e2e check to the first frame each material is used, and flagged the resize as the next thing to fix.
+- So Junie scoped its new e2e check to the first frame each material is used, and flagged the resize as the next thing to fix. That became task #2 (§5).
 
 That is the kind of finding a spec-only workflow would have missed.
 
@@ -83,19 +83,55 @@ A separate Claude reviewer read only the code and the spec, not the orchestrator
 - **The fix:** Junie got a focused follow-up task. It wrote the off-step test first; the test failed on the old code. Then Junie fixed `sample()` (commit `7b65015`).
 - **After the fix:** 42 unit tests pass. CI treats a test that only passes on retry as a failure. It was green on both pushes of the branch, before and after the fix.
 
-## 5. What we learned
+## 5. Junie's own finding becomes Junie's next task
+
+Junie's deviation note (§3) became [Junie task #2](playtest/junie-task-02-quality-at-boundaries.md): never change the render resolution while a timed stage is running.
+
+**The problem.** The booth safeguard lowers the pixel ratio when a weak GPU can't hold the frame rate. Doing that calls `renderer.setSize`, which stalls the main thread for 66–240 ms under SwiftShader. That stall could land on a flash or drone frame while the reaction or time-to-kill clock was already running.
+
+**Junie's first pass** (3 commits):
+- moved the decision into a pure, unit-tested module, `src/render/quality.ts`
+- kept measuring in every phase
+- deferred any drop decided during a stage until the stage ends
+- made the e2e test record the canvas drawing-buffer width on every frame
+
+Junie checked that the work actually tests something:
+- swapping the old logic back in made 3 of the new unit tests fail
+- forcing the old behaviour in the browser made the new whole-stage check fail at 248 ms
+
+**The review.** A second independent Claude reviewer found nothing critical. It raised two evidence gaps:
+- a green CI run could not show that the deferral had ever happened
+- a "< 50 ms per frame in every stage" check might be flaky on a slow CI runner
+
+It also flagged two smaller items: a hand-written phase list, and a resize that ran while the results screen was being built.
+
+**Junie's follow-up** (2 commits): the full-run test now prints each stage's frame numbers and where every resolution change happened into the CI log. It also added an `isStagePhase()` helper, and the deferred resize now runs on the next frame instead of inside the phase change.
+
+**Deciding with data.** The orchestrator re-ran CI 4 times (SwiftShader on a 2-vCPU runner, retries count as failures). All 4 runs were green:
+
+| | Lightning | Drones | Comet |
+|---|---|---|---|
+| Worst frame (JS), across 4 CI runs | 2.7–3.9 ms | 4.1–6.7 ms | 4.5–7.1 ms |
+| Drawing-buffer width inside the stage | unchanged | unchanged | unchanged |
+
+On every run the 960 → 720 resolution drop happened in RESULTS, after the stages. So the deferral was exercised for real, and the 50 ms check stays, with a 7× margin. On the MacBook Pro's real GPU, stage frame timing was unchanged.
+
+## 6. What we learned
 
 - **Measured targets make agents reliable.** "Make the comet easier" is a wish. "Median ≤ 360 px/s, velocity change ≤ 120 px/s per 10 ms step" is a contract that Junie could meet and a reviewer could check.
 - **Bots measure performance; humans measure fun.** The bot scored 99 % on a stage no human could follow.
 - **Reviews need fresh eyes.** The reviewer that had not seen the orchestrator's reasoning found the bug the orchestrator's own reading missed.
-- **Let the implementer report deviations.** Junie's note about the mid-stage resize stall is now on the to-do list instead of hidden inside a weakened test.
+- **Let the implementer report deviations.** Junie's note about the mid-stage resize stall was not buried in a weakened test. It became Junie's next task, and that task is now fixed.
+- **Decide flaky-or-not with data.** Printing the measured numbers in CI turned "might be flaky" into four runs of evidence.
 
 ## Evidence in this repository
 
 - **`.idea/`:** the WebStorm project files.
-- **Junie's commits** (`git log --grep "Generated-by: Junie"`): `5efdd5a`, `97b4d82`, `df7cbe5`, `6d69f07`, `7b65015`.
+- **Junie's commits** (`git log --grep "Generated-by: Junie"`):
+  - task #1: `5efdd5a`, `97b4d82`, `df7cbe5`, `6d69f07`, `7b65015`
+  - task #2: `96c6ff4`, `0059209`, `806b8fe`, `8148aa5`, `7515dc2`
 - **[`playtest/`](playtest/):**
   - the real-GPU bot and its data
   - the playtest reports from both machines
   - the hackathon plan
-  - the Junie task spec
+  - the Junie task specs

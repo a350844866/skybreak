@@ -58,13 +58,14 @@ Most aim trainers are made for long, solo practice. Skybreak is made for that on
 - **Ratings** use fixed reference curves (`src/game/rating.ts`), so a card means the same thing at every event.
 - **Comet path:** a sum of three sines with random phases. It is a pure function of stage time and the run's seed. It speeds up from 0.45× to 0.75× over the stage and turns with eased 400 ms reversals, so it is unpredictable but always followable. Leaving the halo for 150 ms or less keeps your lock, but time outside the halo is never credited.
 - **Fairness on the first run:** every shader is compiled on the first attract-mode frame, and the audio context is created at load. So the first player after a page load is not timed against a stalled frame.
+- **Fairness on slow PCs:** if the GPU can't hold the frame rate, the game lowers its render resolution. The game measures frame times all the time, but it only changes the resolution between stages, never while a reaction or tracking clock is running.
 
 ## Reliability and performance
 
 | Check | Result |
 |---|---|
-| Unit tests (Vitest) | 42 tests: scoring, ratings, state machine, stages, leaderboard, initials |
-| Browser tests (Playwright, run on every push in CI) | 8 end-to-end tests: full run; reaction-time honesty; false starts; abandoned run; resize mid-stage; operator pause; operator tools; offline. CI treats a test that only passes on retry as a failure. |
+| Unit tests (Vitest) | 52 tests: scoring, ratings, state machine, stages, adaptive-resolution logic, leaderboard, initials |
+| Browser tests (Playwright, run on every push in CI) | 8 end-to-end tests: full run; reaction-time honesty; false starts; abandoned run; resize mid-stage; operator pause; operator tools; offline. The full run also checks that no frame in any stage takes over 50 ms of JavaScript, and that the render resolution never changes mid-stage. CI treats a test that only passes on retry as a failure. |
 | Soak harness | `npm run soak` plays up to 300 runs back to back. It checks heap, DOM nodes and listeners, and fails on any page error. |
 | Real GPU (MacBook Pro M2 Pro, Chrome, 1080p) | No frame over 25 ms in any stage. JS time per frame p95 ≤ 0.8 ms, against a 12 ms budget. At 120 Hz no stage dropped a frame. |
 | 10-run soak on real GPU | Heap after GC stayed flat (5.7–6.2 MB), DOM nodes constant, 0 page errors |
@@ -96,7 +97,7 @@ TypeScript (strict), Vite, three.js, WebAudio, IndexedDB, BroadcastChannel and a
 **JetBrains tools:**
 
 - **WebStorm**: the project's IDE (`.idea/` is committed).
-- **Junie**, JetBrains' AI coding agent, with **JetBrains AI Ultimate**: Junie implemented the gameplay iteration that came out of the first human playtest. Its commits carry a `Generated-by: Junie (JetBrains)` trailer.
+- **Junie**, JetBrains' AI coding agent, with **JetBrains AI Ultimate**: Junie made two iterations. The first was the gameplay fixes that came out of the first human playtest. The second fixed a mid-stage render stall that Junie had found itself. Its commits carry a `Generated-by: Junie (JetBrains)` trailer.
 
 The whole agent workflow, including what Claude Code did and what Junie did, is described honestly in [AI_SHOWCASE.md](AI_SHOWCASE.md).
 

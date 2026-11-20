@@ -68,3 +68,18 @@ In `DESIGN.md`, where rendering, performance or booth safeguards are described, 
 - Commit to this branch only. End every commit message with the trailer line `Generated-by: Junie (JetBrains)`.
 - Do not push. Do not touch `playtest/`.
 - Report what you changed (by file), what you verified, and anything left undone.
+
+## Outcome (2026-11-20, added by the orchestrator)
+
+**Merged in `d7ecd15`.**
+
+The independent review led to a follow-up (commits `8148aa5` and `7515dc2`). It changed one thing from §A.2: a deferred drop is no longer applied inside `enter()`. `setStageActive(false)` only marks the drop as due, and the next `render()` applies it through `takeDue()`, unless a stage is active again by then.
+
+**4 CI re-runs, all green.**
+
+- Whole-stage worst frame (JS):
+  - Lightning 2.7–3.9 ms
+  - Drones 4.1–6.7 ms
+  - Comet 4.5–7.1 ms
+- The 960 → 720 drop landed in RESULTS every time.
+- The 50 ms whole-stage check stays.
